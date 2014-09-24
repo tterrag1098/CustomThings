@@ -26,7 +26,7 @@ public class ArmorType
     public String getTextureName(int armorType)
     {
         int num = armorType == 2 ? 2 : 1;
-        return CustomThings.MODID.toLowerCase() + ":" + name + num;
+        return name + num;
     }
     
     public String getMaterialName()
