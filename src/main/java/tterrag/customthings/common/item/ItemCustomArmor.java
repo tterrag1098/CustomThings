@@ -12,7 +12,6 @@ public class ItemCustomArmor extends ItemArmor
     public ItemCustomArmor(ArmorType type, int slot)
     {
         super(type.getMaterial(), 0, slot);
-        setTextureName(type.name);
         this.textureName = CustomThings.MODID.toLowerCase() + ":textures/items/" + type.getTextureName(slot);
     }
     

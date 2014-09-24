@@ -45,7 +45,7 @@ public class ArmorType
         items = new Item[4];
         for (int i = 0; i <= 3; i++)
         {
-            items[i] = new ItemCustomArmor(this, i);
+            items[i] = new ItemCustomArmor(this, i).setTextureName(this.name + names[i]).setUnlocalizedName(this.name + names[i]);
             GameRegistry.registerItem(items[i], name + names[i]);
         }
     }
