@@ -66,7 +66,6 @@ public class JsonConfigReader<T>
         List<T> list = new ArrayList<T>();
         for (int i = 0; i < elements.size(); i++)
         {
-            System.out.println("Loading element: " + elements.get(i).toString());
             list.add(gson.fromJson(elements.get(i), clazz));
         }
         return list;

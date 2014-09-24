@@ -7,6 +7,7 @@ import tterrag.core.common.util.IOUtils;
 import tterrag.core.common.util.ResourcePackAssembler;
 import tterrag.customthings.CustomThings;
 import tterrag.customthings.common.config.json.ArmorType;
+import tterrag.customthings.common.config.json.ToolType;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class ConfigHandler
@@ -14,6 +15,7 @@ public class ConfigHandler
     public static File baseDir;
 
     private static JsonConfigReader<ArmorType> armorReader;
+    private static JsonConfigReader<ToolType> toolReader;
 
     private static ResourcePackAssembler assembler;
 
@@ -36,6 +38,7 @@ public class ConfigHandler
         }
         
         armorReader = new JsonConfigReader<ArmorType>(baseDir.getAbsolutePath() + "/" + "customArmors.json", ArmorType.class);
+        toolReader = new JsonConfigReader<ToolType>(baseDir.getAbsolutePath() + "/" + "customTools.json", ToolType.class);
     }
 
     private static void addIcons(ResourcePackAssembler assembler)
@@ -65,5 +68,6 @@ public class ConfigHandler
     public static void init()
     {
         ArmorType.addAll(armorReader.getElements());
+        ToolType.addAll(toolReader.getElements());
     }
 }

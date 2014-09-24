@@ -12,6 +12,8 @@ public class ItemCustomArmor extends ItemArmor
     public ItemCustomArmor(ArmorType type, int slot)
     {
         super(type.getMaterial(), 0, slot);
+        setTextureName(type.getIconName(slot));
+        setUnlocalizedName(type.getUnlocName(slot));
         this.textureName = CustomThings.MODID.toLowerCase() + ":textures/items/" + type.getTextureName(slot) + ".png";
     }
     

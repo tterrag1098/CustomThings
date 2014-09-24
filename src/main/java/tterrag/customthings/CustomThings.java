@@ -15,7 +15,7 @@ import static tterrag.customthings.CustomThings.*;
 public class CustomThings implements IModTT
 {
     public static final String MODID = "customthings";
-    public static final String NAME = "CustomThings";
+    public static final String NAME = "Custom Things";
     public static final String VERSION = "@VERSION@";
     
     @EventHandler
