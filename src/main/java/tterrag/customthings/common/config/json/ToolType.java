@@ -7,80 +7,135 @@ import java.util.List;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraftforge.common.util.EnumHelper;
+
+import org.apache.commons.lang3.StringUtils;
+
 import tterrag.customthings.CustomThings;
 import tterrag.customthings.common.item.ICustomTool;
+import tterrag.customthings.common.item.ItemCustomAxe;
+import tterrag.customthings.common.item.ItemCustomHoe;
 import tterrag.customthings.common.item.ItemCustomPickaxe;
+import tterrag.customthings.common.item.ItemCustomShovel;
+import tterrag.customthings.common.item.ItemCustomSword;
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ToolType extends JsonType
 {
     public static enum ToolClass
     {
-        PICKAXE(ItemCustomPickaxe.class);//, SHOVEL, AXE, SWORD, HOE;
-        
+        PICKAXE(ItemCustomPickaxe.class), SHOVEL(ItemCustomShovel.class), AXE(ItemCustomAxe.class), SWORD(ItemCustomSword.class), HOE(ItemCustomHoe.class);
+
         public final Class<? extends ICustomTool> itemClass;
+
         ToolClass(Class<? extends ICustomTool> itemClass)
         {
             this.itemClass = itemClass;
         }
+
+        public String getUnlocName(String base)
+        {
+            return base + StringUtils.capitalize(this.name().toLowerCase());
+        }
     }
 
     /* JSON Fields @formatter:off */    
-    public String    type           = "PICKAXE";
+    public String[]  toolTypes      = {"PICKAXE", "SHOVEL", "AXE", "SWORD", "HOE"}; 
     public int       level          = 1;
     public int       durability     = 500;
     public float     efficiency     = 4.0f;
     public float     damage         = 1.0f;
     public int       enchantability = 5;
     /* End JSON Fields @formatter:on */
-    
-    private transient Item item;
 
-    public ToolClass getToolClass()
+    private transient Item pickaxe, shovel, axe, sword, hoe;
+
+    public List<ToolClass> getToolClasses()
     {
-        return ToolClass.valueOf(type.toUpperCase());
+        List<ToolClass> list = new ArrayList<ToolClass>();
+        for (String s : toolTypes)
+        {
+            list.add(ToolClass.valueOf(s.toUpperCase()));
+        }
+        return list;
     }
 
     public ToolMaterial getToolMaterial()
     {
         return ToolMaterial.valueOf(name);
     }
-    
+
     public static final List<ToolType> types = new ArrayList<ToolType>();
 
     private void register()
-    {  
+    {
+        for (ToolClass clazz : getToolClasses())
+        {
+            switch (clazz)
+            {
+            case PICKAXE:
+                pickaxe = instantiate(clazz);
+                GameRegistry.registerItem(pickaxe, clazz.getUnlocName(name));
+                break;
+            case AXE:
+                axe = instantiate(clazz);
+                GameRegistry.registerItem(axe, clazz.getUnlocName(name));
+                break;
+            case HOE:
+                hoe = instantiate(clazz);
+                GameRegistry.registerItem(hoe, clazz.getUnlocName(name));
+                break;
+            case SHOVEL:
+                shovel = instantiate(clazz);
+                GameRegistry.registerItem(shovel, clazz.getUnlocName(name));
+                break;
+            case SWORD:
+                sword = instantiate(clazz);
+                GameRegistry.registerItem(sword, clazz.getUnlocName(name));
+                break;
+            }
+        }
+    }
+
+    private Item instantiate(ToolClass clazz)
+    {
         try
         {
-            item = (Item) this.getToolClass().itemClass.getDeclaredConstructor(ToolType.class).newInstance(this);
+            return (Item) clazz.itemClass.getDeclaredConstructor(ToolType.class).newInstance(this);
         }
         catch (NoSuchMethodException e)
         {
-            throw new NoSuchMethodError("Class " + this.getToolClass().itemClass.getName() + " must have a constructor that takes a ToolType object");
+            throw new NoSuchMethodError("Class " + clazz.itemClass.getName() + " must have a constructor that takes a ToolType object");
         }
         catch (Exception e)
         {
             throw new RuntimeException(e);
         }
-        
-        GameRegistry.registerItem(item, name);
-    }
-    
-    public String getUnlocName()
-    {
-        return name;
     }
 
-    public String getIconName()
+    public String getUnlocName(ToolClass toolClass)
     {
-        return CustomThings.MODID.toLowerCase() + ":" + getUnlocName();
+        return toolClass.getUnlocName(name);
+    }
+
+    public String getIconName(ToolClass toolClass)
+    {
+        return CustomThings.MODID.toLowerCase() + ":" + getUnlocName(toolClass);
+    }
+
+    public Item getItem(ToolClass toolClass)
+    {
+        switch(toolClass)
+        {
+            case PICKAXE: return pickaxe;
+            default:      return null;
+        }
     }
     
-    public Item getItem()
+    public boolean hasItem(ToolClass toolClass)
     {
-        return item;
+        return getItem(toolClass) != null;
     }
-    
+
     public static void addType(ToolType type)
     {
         EnumHelper.addToolMaterial(type.name, type.level, type.durability, type.efficiency, type.damage, type.enchantability);
