@@ -39,7 +39,7 @@ public class ToolType extends JsonType
     }
 
     /* JSON Fields @formatter:off */    
-    public String[]  toolTypes      = {"PICKAXE", "SHOVEL", "AXE", "SWORD", "HOE"}; 
+    public String[]  tools      = {"PICKAXE", "SHOVEL", "AXE", "SWORD", "HOE"}; 
     public int       level          = 1;
     public int       durability     = 500;
     public float     efficiency     = 4.0f;
@@ -52,7 +52,7 @@ public class ToolType extends JsonType
     public List<ToolClass> getToolClasses()
     {
         List<ToolClass> list = new ArrayList<ToolClass>();
-        for (String s : toolTypes)
+        for (String s : tools)
         {
             list.add(ToolClass.valueOf(s.toUpperCase()));
         }

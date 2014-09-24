@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraftforge.common.util.EnumHelper;
@@ -13,10 +15,11 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ArmorType extends JsonType
 {
-    /* JSON Fields @formatter:off */    
-    public int    durability        = 5;
-    public int[]  reductionAmounts  = {1, 3, 2, 1};
-    public int    enchantability    = 15;
+    /* JSON Fields @formatter:off */
+    public int[]    armors            = {0, 1, 2, 3};
+    public int      durability        = 5;
+    public int[]    reductionAmounts  = {1, 3, 2, 1};
+    public int      enchantability    = 15;
     /* End JSON Fields @formatter:on */
 
     private transient Item[] items;
@@ -44,8 +47,11 @@ public class ArmorType extends JsonType
         items = new Item[4];
         for (int i = 0; i <= 3; i++)
         {
-            items[i] = new ItemCustomArmor(this, i);
-            GameRegistry.registerItem(items[i], name + names[i]);
+            if (ArrayUtils.contains(armors, i))
+            {
+                items[i] = new ItemCustomArmor(this, i);
+                GameRegistry.registerItem(items[i], name + names[i]);
+            }
         }
     }
 
@@ -58,7 +64,7 @@ public class ArmorType extends JsonType
     {
         return CustomThings.MODID.toLowerCase() + ":" + getUnlocName(slot);
     }
-    
+
     public Item[] getItems()
     {
         return items;
