@@ -20,7 +20,7 @@ public class ArmorType
     public int    enchantability    = 15;
     /* End JSON Fields */
 
-    private Item[] items;
+    private transient Item[] items;
     
     public String getTextureName(int armorType)
     {
