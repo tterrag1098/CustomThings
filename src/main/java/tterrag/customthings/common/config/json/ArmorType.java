@@ -7,6 +7,7 @@ import java.util.List;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraftforge.common.util.EnumHelper;
+import tterrag.customthings.CustomThings;
 import tterrag.customthings.common.item.ItemCustomArmor;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -25,7 +26,7 @@ public class ArmorType
     public String getTextureName(int armorType)
     {
         int num = armorType == 2 ? 2 : 1;
-        return name + num;
+        return CustomThings.MODID.toLowerCase() + ":" + name + num;
     }
     
     public String getMaterialName()
@@ -45,9 +46,19 @@ public class ArmorType
         items = new Item[4];
         for (int i = 0; i <= 3; i++)
         {
-            items[i] = new ItemCustomArmor(this, i).setTextureName(this.name + names[i]).setUnlocalizedName(this.name + names[i]);
+            items[i] = new ItemCustomArmor(this, i).setTextureName(getIconName(i)).setUnlocalizedName(getUnlocName(i));
             GameRegistry.registerItem(items[i], name + names[i]);
         }
+    }
+    
+    private String getUnlocName(int slot)
+    {
+        return name + names[slot];
+    }
+    
+    private String getIconName(int slot)
+    {
+        return CustomThings.MODID.toLowerCase() + ":" + getUnlocName(slot);
     }
     
     public static final List<ArmorType> types = new ArrayList<ArmorType>();
