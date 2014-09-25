@@ -23,7 +23,11 @@ public class ToolType extends JsonType
 {
     public static enum ToolClass
     {
-        PICKAXE(ItemCustomPickaxe.class), SHOVEL(ItemCustomShovel.class), AXE(ItemCustomAxe.class), SWORD(ItemCustomSword.class), HOE(ItemCustomHoe.class);
+        PICKAXE (ItemCustomPickaxe.class), 
+        SHOVEL  (ItemCustomShovel.class), 
+        AXE     (ItemCustomAxe.class), 
+        SWORD   (ItemCustomSword.class), 
+        HOE     (ItemCustomHoe.class);
 
         public final Class<? extends ICustomTool> itemClass;
 
@@ -127,6 +131,10 @@ public class ToolType extends JsonType
         switch(toolClass)
         {
             case PICKAXE: return pickaxe;
+            case AXE:     return axe;
+            case HOE:     return hoe;
+            case SHOVEL:  return shovel;
+            case SWORD:   return sword;
             default:      return null;
         }
     }
