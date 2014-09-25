@@ -1,17 +1,16 @@
 package tterrag.customthings;
 
+import static tterrag.customthings.CustomThings.*;
 import tterrag.core.IModTT;
 import tterrag.core.common.compat.CompatabilityRegistry;
 import tterrag.core.common.util.RegisterTime;
 import tterrag.customthings.common.config.ConfigHandler;
-import tterrag.customthings.common.nei.NEIHider;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import static tterrag.customthings.CustomThings.*;
 
-@Mod(modid = MODID, name = NAME, version = VERSION, dependencies = "required-after:ttCore@1.7.10-0.0.2-13,)")
+@Mod(modid = MODID, name = NAME, version = VERSION, dependencies = "required-after:ttCore@1.7.10-0.0.2-14,)")
 public class CustomThings implements IModTT
 {
     public static final String MODID = "customthings";
@@ -22,7 +21,7 @@ public class CustomThings implements IModTT
     public void preInit(FMLPreInitializationEvent event)
     {
         ConfigHandler.preInit(event);
-        CompatabilityRegistry.instance().registerCompat(RegisterTime.POSTINIT, NEIHider.class, "NotEnoughItems");
+        CompatabilityRegistry.instance().registerCompat(RegisterTime.POSTINIT, "tterrag.customthings.common.nei.NEIHider", "NotEnoughItems");
     }
     
     @EventHandler
