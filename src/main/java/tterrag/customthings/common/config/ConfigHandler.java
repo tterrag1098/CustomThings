@@ -24,13 +24,13 @@ public class ConfigHandler
     {
         baseDir = new File(event.getSuggestedConfigurationFile().getParent() + "/" + CustomThings.MODID);
         assembler = new ResourcePackAssembler(new File(baseDir.getAbsolutePath() + "/CustomThings-Resourcepack"), "Custom Things Resource Pack", CustomThings.MODID);
-//                .setHasPackPng(CustomThings.class);
+        // .setHasPackPng(CustomThings.class);
 
         addIcons(assembler);
         addLangs(assembler);
 
         assembler.assemble().inject();
-        
+
         armorReader = new JsonConfigReader<ArmorType>(baseDir.getAbsolutePath() + "/" + "customArmors.json", ArmorType.class);
         toolReader = new JsonConfigReader<ToolType>(baseDir.getAbsolutePath() + "/" + "customTools.json", ToolType.class);
         itemReader = new JsonConfigReader<ItemType>(baseDir.getAbsolutePath() + "/" + "customItems.json", ItemType.class);
@@ -53,7 +53,7 @@ public class ConfigHandler
             assembler.addLang(f);
         }
     }
-    
+
     private static void initialize(String dir)
     {
         File temp = new File(baseDir.getAbsolutePath() + "/" + dir);
@@ -65,6 +65,10 @@ public class ConfigHandler
         ArmorType.addAll(armorReader.getElements());
         ToolType.addAll(toolReader.getElements());
         ItemType.addAll(itemReader.getElements());
-        ItemType.register();
+
+        if (ItemType.getTypes().size() > 0)
+        {
+            ItemType.register();
+        }
     }
 }
