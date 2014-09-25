@@ -11,7 +11,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import static tterrag.customthings.CustomThings.*;
 
-@Mod(modid = MODID, name = NAME, version = VERSION, dependencies = "required-after:ttCore@1.7.10-0.0.2-12,)")
+@Mod(modid = MODID, name = NAME, version = VERSION, dependencies = "required-after:ttCore@1.7.10-0.0.2-13,)")
 public class CustomThings implements IModTT
 {
     public static final String MODID = "customthings";

@@ -1,7 +1,6 @@
 package tterrag.customthings.common.config;
 
 import java.io.File;
-import java.io.IOException;
 
 import tterrag.core.common.util.IOUtils;
 import tterrag.core.common.util.ResourcePackAssembler;
@@ -30,14 +29,7 @@ public class ConfigHandler
         addIcons(assembler);
         addLangs(assembler);
 
-        try
-        {
-            assembler.assemble().inject(new File(baseDir.getParentFile().getParentFile().getAbsolutePath() + "/resourcepacks"));
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
+        assembler.assemble().inject();
         
         armorReader = new JsonConfigReader<ArmorType>(baseDir.getAbsolutePath() + "/" + "customArmors.json", ArmorType.class);
         toolReader = new JsonConfigReader<ToolType>(baseDir.getAbsolutePath() + "/" + "customTools.json", ToolType.class);

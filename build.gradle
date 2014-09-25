@@ -39,7 +39,7 @@ repositories {
 }
 
 dependencies {
-	compile "tterrag.core:ttCore:MC1.7.10-0.0.2-12"
+	compile "tterrag.core:ttCore:MC1.7.10-0.0.2-13"
     compile fileTree(dir: 'libs', include: '*.jar')
 }
 
