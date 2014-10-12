@@ -106,7 +106,7 @@ public class ConfigHandler
 
         if (ItemType.getTypes().size() > 0)
         {
-            ItemType.register();
+            ItemType.getType(0).register();
         }
     }
 }

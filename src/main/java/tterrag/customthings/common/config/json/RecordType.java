@@ -17,7 +17,7 @@ public class RecordType extends JsonType
     
     private transient ItemRecord item;
     
-    private void register()
+    public void register()
     {
         item = new ItemCustomRecord(name);
         GameRegistry.registerItem(item, name);

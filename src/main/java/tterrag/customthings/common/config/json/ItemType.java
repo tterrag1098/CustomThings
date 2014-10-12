@@ -32,7 +32,7 @@ public class ItemType extends JsonType
         }
     }
     
-    public static void register()
+    public void register()
     {
         if (item == null)
         {

@@ -42,7 +42,7 @@ public class ArmorType extends JsonType
 
     private static final String[] names = { "Helm", "Chest", "Legs", "Boots" };
 
-    private void register()
+    public void register()
     {
         items = new Item[4];
         for (int i = 0; i <= 3; i++)
