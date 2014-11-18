@@ -28,10 +28,6 @@ repositories {
         name 'tterrag maven'
         url "http://maven.tterrag.com/"
     }
-	maven { // WAILA
-        name 'Mobius Repo'
-        url "http://mobiusstrip.eu/maven"
-    }
     maven { // CCC/NEI (for WAILA)
         name 'CB Repo'
         url "http://chickenbones.net/maven/"
@@ -39,7 +35,8 @@ repositories {
 }
 
 dependencies {
-	compile "tterrag.core:ttCore:MC1.7.10-0.0.2-14"
+	compile "tterrag.core:ttCore:MC1.7.10-0.0.2-24"
+    compile "codechicken:NotEnoughItems:1.7.10-1.0.3.57:dev"
     compile fileTree(dir: 'libs', include: '*.jar')
 }
 

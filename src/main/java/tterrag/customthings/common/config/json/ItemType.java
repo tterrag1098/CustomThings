@@ -31,7 +31,8 @@ public class ItemType extends JsonType
             addType(type);
         }
     }
-    
+
+    @Override
     public void register()
     {
         if (item == null)

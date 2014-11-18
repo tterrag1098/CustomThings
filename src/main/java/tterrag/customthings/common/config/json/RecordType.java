@@ -17,6 +17,7 @@ public class RecordType extends JsonType
     
     private transient ItemRecord item;
     
+    @Override
     public void register()
     {
         item = new ItemCustomRecord(name);

@@ -10,7 +10,7 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = MODID, name = NAME, version = VERSION, dependencies = "required-after:ttCore@1.7.10-0.0.2-14,)")
+@Mod(modid = MODID, name = NAME, version = VERSION, dependencies = "required-after:ttCore@1.7.10-0.0.2-24,)")
 public class CustomThings implements IModTT
 {
     public static final String MODID = "customthings";
@@ -21,7 +21,7 @@ public class CustomThings implements IModTT
     public void preInit(FMLPreInitializationEvent event)
     {
         ConfigHandler.preInit(event);
-        CompatabilityRegistry.instance().registerCompat(RegisterTime.POSTINIT, "tterrag.customthings.common.nei.NEIHider", "NotEnoughItems");
+        CompatabilityRegistry.INSTANCE.registerCompat(RegisterTime.POSTINIT, "tterrag.customthings.common.nei.NEIHider", "NotEnoughItems");
     }
     
     @EventHandler

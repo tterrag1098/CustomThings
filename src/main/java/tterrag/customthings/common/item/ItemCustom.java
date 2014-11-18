@@ -44,6 +44,12 @@ public class ItemCustom extends Item
     @Override
     public IIcon getIcon(ItemStack stack, int pass)
     {
-        return stack.getItemDamage() < icons.length ? icons[stack.getItemDamage()] : null;
+        return stack == null ? null : getIconFromDamage(stack.getItemDamage());
+    }
+    
+    @Override
+    public IIcon getIconFromDamage(int damage)
+    {
+        return damage < icons.length ? icons[damage] : null;
     }
 }

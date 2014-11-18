@@ -70,6 +70,7 @@ public class ToolType extends JsonType
 
     public static final List<ToolType> types = new ArrayList<ToolType>();
 
+    @Override
     public void register()
     {
         for (ToolClass clazz : getToolClasses())
