@@ -10,7 +10,7 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = MODID, name = NAME, version = VERSION, dependencies = "required-after:ttCore@MC1.7.10-0.0.3-29,)")
+@Mod(modid = MODID, name = NAME, version = VERSION, dependencies = "required-after:ttCore@[MC1.7.10-0.0.3-36,)")
 public class CustomThings implements IModTT
 {
     public static final String MODID = "customthings";

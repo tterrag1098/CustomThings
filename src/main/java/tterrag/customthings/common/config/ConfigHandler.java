@@ -5,6 +5,8 @@ import java.io.FileFilter;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 
+import tterrag.core.common.config.JsonConfigReader;
+import tterrag.core.common.config.JsonConfigReader.ModToken;
 import tterrag.core.common.json.JsonUtils;
 import tterrag.core.common.util.IOUtils;
 import tterrag.core.common.util.ResourcePackAssembler;
@@ -36,11 +38,12 @@ public class ConfigHandler
         assembler = new ResourcePackAssembler(new File(baseDir.getAbsolutePath() + "/CustomThings-Resourcepack"), "Custom Things Resource Pack", CustomThings.MODID);
         // .setHasPackPng(CustomThings.class);
 
-        armorReader = new JsonConfigReader<ArmorType>(baseDir.getAbsolutePath() + "/" + "customArmors.json", ArmorType.class);
-        toolReader = new JsonConfigReader<ToolType>(baseDir.getAbsolutePath() + "/" + "customTools.json", ToolType.class);
-        itemReader = new JsonConfigReader<ItemType>(baseDir.getAbsolutePath() + "/" + "customItems.json", ItemType.class);
-        recordReader = new JsonConfigReader<RecordType>(baseDir.getAbsoluteFile() + "/" + "customRecords.json", RecordType.class);
-
+        ModToken token = new ModToken(CustomThings.class, CustomThings.MODID + "/misc");
+        armorReader = new JsonConfigReader<ArmorType>(token, baseDir.getAbsolutePath() + "/" + "customArmors.json", ArmorType.class);
+        toolReader = new JsonConfigReader<ToolType>(token, baseDir.getAbsolutePath() + "/" + "customTools.json", ToolType.class);
+        itemReader = new JsonConfigReader<ItemType>(token, baseDir.getAbsolutePath() + "/" + "customItems.json", ItemType.class);
+        recordReader = new JsonConfigReader<RecordType>(token, baseDir.getAbsoluteFile() + "/" + "customRecords.json", RecordType.class);
+        
         addIcons(assembler);
         addLangs(assembler);
         addCustoms(assembler);
