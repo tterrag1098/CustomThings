@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import lombok.Getter;
 import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.EnumHelper;
 
 import org.apache.commons.lang3.StringUtils;
 
+import tterrag.core.common.json.JsonUtils;
 import tterrag.customthings.CustomThings;
 import tterrag.customthings.common.item.ICustomTool;
 import tterrag.customthings.common.item.ItemCustomAxe;
@@ -49,9 +52,13 @@ public class ToolType extends JsonType
     public float     efficiency     = 4.0f;
     public float     damage         = 1.0f;
     public int       enchantability = 5;
+    public String    material       = "null";
     /* End JSON Fields @formatter:on */
 
     private transient Item pickaxe, shovel, axe, sword, hoe;
+    
+    @Getter
+    private transient ItemStack repairMat;
 
     public List<ToolClass> getToolClasses()
     {
@@ -99,6 +106,8 @@ public class ToolType extends JsonType
                 break;
             }
         }
+        
+        repairMat = material.equals("null") ? null : JsonUtils.parseStringIntoItemStack(material);
     }
 
     private Item instantiate(ToolClass clazz)
