@@ -17,7 +17,7 @@ import tterrag.customthings.common.config.json.RecordType;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-@Handler(types = HandlerType.FORGE)
+@Handler(HandlerType.FORGE)
 public class LivingDropsHandler
 {
     private static final Random rand = new Random();

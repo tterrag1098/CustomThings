@@ -10,12 +10,13 @@ import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = MODID, name = NAME, version = VERSION, dependencies = "required-after:ttCore@[MC1.7.10-0.0.3-36,)")
+@Mod(modid = MODID, name = NAME, version = VERSION, dependencies = DEPENDENCIES)
 public class CustomThings implements IModTT
 {
     public static final String MODID = "customthings";
     public static final String NAME = "Custom Things";
     public static final String VERSION = "@VERSION@";
+    public static final String DEPENDENCIES = "after:ttCore";
     
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)

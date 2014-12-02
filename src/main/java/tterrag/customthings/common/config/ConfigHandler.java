@@ -8,7 +8,7 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import tterrag.core.common.config.JsonConfigReader;
 import tterrag.core.common.config.JsonConfigReader.ModToken;
 import tterrag.core.common.json.JsonUtils;
-import tterrag.core.common.util.IOUtils;
+import tterrag.core.common.util.TTFileUtils;
 import tterrag.core.common.util.ResourcePackAssembler;
 import tterrag.customthings.CustomThings;
 import tterrag.customthings.common.config.json.ArmorType;
@@ -54,7 +54,7 @@ public class ConfigHandler
     private static void addIcons(ResourcePackAssembler assembler)
     {
         initialize("icons");
-        for (File f : new File(baseDir.getAbsolutePath() + "/icons").listFiles(IOUtils.pngFilter))
+        for (File f : new File(baseDir.getAbsolutePath() + "/icons").listFiles(TTFileUtils.pngFilter))
         {
             assembler.addIcon(f);
         }
@@ -63,7 +63,7 @@ public class ConfigHandler
     private static void addLangs(ResourcePackAssembler assembler)
     {
         initialize("lang");
-        for (File f : new File(baseDir.getAbsolutePath() + "/lang").listFiles(IOUtils.langFilter))
+        for (File f : new File(baseDir.getAbsolutePath() + "/lang").listFiles(TTFileUtils.langFilter))
         {
             assembler.addLang(f);
         }
@@ -86,7 +86,7 @@ public class ConfigHandler
             event.add("sounds", sounds);
             root.add("records." + CustomThings.MODID + "." + getSimpleName(f), event); // event name (same as name sent to ItemCustomRecord)
         }
-        assembler.addCustomFile("assets/minecraft", IOUtils.writeToFile(baseDir.getAbsolutePath() + "/recordMusic/sounds.json", JsonUtils.gson.toJson(root)));
+        assembler.addCustomFile("assets/minecraft", TTFileUtils.writeToFile(baseDir.getAbsolutePath() + "/recordMusic/sounds.json", JsonUtils.gson.toJson(root)));
     }
 
     private static String getSimpleName(File file)
