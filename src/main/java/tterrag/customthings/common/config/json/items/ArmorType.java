@@ -1,7 +1,6 @@
-package tterrag.customthings.common.config.json;
+package tterrag.customthings.common.config.json.items;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.item.Item;
@@ -11,6 +10,7 @@ import net.minecraftforge.common.util.EnumHelper;
 import org.apache.commons.lang3.ArrayUtils;
 
 import tterrag.customthings.CustomThings;
+import tterrag.customthings.common.config.json.JsonType;
 import tterrag.customthings.common.item.ItemCustomArmor;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -45,10 +45,12 @@ public class ArmorType extends JsonType
     }
 
     private static final String[] names = { "Helm", "Chest", "Legs", "Boots" };
+    public static final List<ArmorType> types = new ArrayList<ArmorType>();
 
     @Override
     public void register()
     {
+        EnumHelper.addArmorMaterial(getMaterialName(), 0, protectionDisplays, enchantability); // dummy, used for enchantability
         items = new Item[4];
         for (int i = 0; i <= 3; i++)
         {
@@ -58,6 +60,7 @@ public class ArmorType extends JsonType
                 GameRegistry.registerItem(items[i], name + names[i]);
             }
         }
+        types.add(this);
     }
 
     public String getUnlocName(int slot)
@@ -73,22 +76,5 @@ public class ArmorType extends JsonType
     public Item[] getItems()
     {
         return items;
-    }
-
-    public static final List<ArmorType> types = new ArrayList<ArmorType>();
-
-    public static void addType(ArmorType type)
-    {
-        EnumHelper.addArmorMaterial(type.getMaterialName(), 0, type.protectionDisplays, type.enchantability); // dummy, used for enchantability
-        types.add(type);
-        type.register();
-    }
-
-    public static void addAll(Collection<? extends ArmorType> col)
-    {
-        for (ArmorType type : col)
-        {
-            addType(type);
-        }
     }
 }

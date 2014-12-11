@@ -1,10 +1,10 @@
-package tterrag.customthings.common.config.json;
+package tterrag.customthings.common.config.json.items;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import net.minecraft.item.Item;
+import tterrag.customthings.common.config.json.JsonType;
 import tterrag.customthings.common.item.ItemCustom;
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -19,19 +19,6 @@ public class ItemType extends JsonType
 
     private static final List<ItemType> types = new ArrayList<ItemType>();
 
-    public static void addType(ItemType type)
-    {
-        types.add(type);
-    }
-
-    public static void addAll(Collection<? extends ItemType> col)
-    {
-        for (ItemType type : col)
-        {
-            addType(type);
-        }
-    }
-
     @Override
     public void register()
     {
@@ -40,10 +27,8 @@ public class ItemType extends JsonType
             item = new ItemCustom();
             GameRegistry.registerItem(item, "customthings.item");
         }
-        else
-        {
-            throw new IllegalStateException("ItemType can only be registered once.");
-        }
+        
+        types.add(this);
     }
 
     public static ItemType getType(int damage)

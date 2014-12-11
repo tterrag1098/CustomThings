@@ -5,7 +5,7 @@ import net.minecraft.item.ItemRecord;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import tterrag.customthings.CustomThings;
-import tterrag.customthings.common.config.json.RecordType;
+import tterrag.customthings.common.config.json.items.RecordType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 

@@ -7,8 +7,8 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import tterrag.customthings.common.config.json.ToolType;
-import tterrag.customthings.common.config.json.ToolType.ToolClass;
+import tterrag.customthings.common.config.json.items.ToolType;
+import tterrag.customthings.common.config.json.items.ToolType.ToolClass;
 
 public class ItemCustomPickaxe extends ItemPickaxe implements ICustomTool
 {

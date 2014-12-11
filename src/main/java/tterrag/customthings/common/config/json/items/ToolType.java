@@ -1,7 +1,6 @@
-package tterrag.customthings.common.config.json;
+package tterrag.customthings.common.config.json.items;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import lombok.Getter;
@@ -14,6 +13,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import tterrag.core.common.json.JsonUtils;
 import tterrag.customthings.CustomThings;
+import tterrag.customthings.common.config.json.JsonType;
 import tterrag.customthings.common.item.ICustomTool;
 import tterrag.customthings.common.item.ItemCustomAxe;
 import tterrag.customthings.common.item.ItemCustomHoe;
@@ -79,7 +79,9 @@ public class ToolType extends JsonType
 
     @Override
     public void register()
-    {
+    {        
+        EnumHelper.addToolMaterial(name, level, durability, efficiency, damage, enchantability);
+
         for (ToolClass clazz : getToolClasses())
         {
             switch (clazz)
@@ -108,6 +110,7 @@ public class ToolType extends JsonType
         }
         
         repairMat = material.equals("null") ? null : JsonUtils.parseStringIntoItemStack(material);
+        types.add(this);
     }
 
     private Item instantiate(ToolClass clazz)
@@ -152,20 +155,5 @@ public class ToolType extends JsonType
     public boolean hasItem(ToolClass toolClass)
     {
         return getItem(toolClass) != null;
-    }
-
-    public static void addType(ToolType type)
-    {
-        EnumHelper.addToolMaterial(type.name, type.level, type.durability, type.efficiency, type.damage, type.enchantability);
-        types.add(type);
-        type.register();
-    }
-
-    public static void addAll(Collection<? extends ToolType> col)
-    {
-        for (ToolType type : col)
-        {
-            addType(type);
-        }
     }
 }

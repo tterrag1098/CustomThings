@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.ISpecialArmor;
 import tterrag.customthings.CustomThings;
-import tterrag.customthings.common.config.json.ArmorType;
+import tterrag.customthings.common.config.json.items.ArmorType;
 
 public class ItemCustomArmor extends ItemArmor implements ISpecialArmor
 {

@@ -72,12 +72,4 @@ public class BlockType extends JsonType
             return stacks;
         }
     }
-
-    public static void addAll(List<BlockType> elements)
-    {
-        for (BlockType type : elements)
-        {
-            type.register();
-        }
-    }
 }

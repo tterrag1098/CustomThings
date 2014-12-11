@@ -8,13 +8,17 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import tterrag.core.common.config.JsonConfigReader;
 import tterrag.core.common.config.JsonConfigReader.ModToken;
 import tterrag.core.common.json.JsonUtils;
-import tterrag.core.common.util.TTFileUtils;
 import tterrag.core.common.util.ResourcePackAssembler;
+import tterrag.core.common.util.TTFileUtils;
 import tterrag.customthings.CustomThings;
-import tterrag.customthings.common.config.json.ArmorType;
-import tterrag.customthings.common.config.json.ItemType;
-import tterrag.customthings.common.config.json.RecordType;
-import tterrag.customthings.common.config.json.ToolType;
+import tterrag.customthings.common.config.json.IJsonType;
+import tterrag.customthings.common.config.json.crafting.ShapedJsonRecipe;
+import tterrag.customthings.common.config.json.crafting.ShapelessJsonRecipe;
+import tterrag.customthings.common.config.json.crafting.SmeltingJsonRecipe;
+import tterrag.customthings.common.config.json.items.ArmorType;
+import tterrag.customthings.common.config.json.items.ItemType;
+import tterrag.customthings.common.config.json.items.RecordType;
+import tterrag.customthings.common.config.json.items.ToolType;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -29,6 +33,9 @@ public class ConfigHandler
     private static JsonConfigReader<ToolType> toolReader;
     private static JsonConfigReader<ItemType> itemReader;
     private static JsonConfigReader<RecordType> recordReader;
+    private static JsonConfigReader<ShapedJsonRecipe> shapedReader;
+    private static JsonConfigReader<ShapelessJsonRecipe> shapelessReader;
+    private static JsonConfigReader<SmeltingJsonRecipe> smeltingReader;
 
     private static ResourcePackAssembler assembler;
 
@@ -43,7 +50,10 @@ public class ConfigHandler
         toolReader = new JsonConfigReader<ToolType>(token, baseDir.getAbsolutePath() + "/" + "customTools.json", ToolType.class);
         itemReader = new JsonConfigReader<ItemType>(token, baseDir.getAbsolutePath() + "/" + "customItems.json", ItemType.class);
         recordReader = new JsonConfigReader<RecordType>(token, baseDir.getAbsoluteFile() + "/" + "customRecords.json", RecordType.class);
-        
+        shapedReader = new JsonConfigReader<ShapedJsonRecipe>(token, baseDir.getAbsolutePath() + "/" + "shapedRecipes.json", ShapedJsonRecipe.class);
+        shapelessReader = new JsonConfigReader<ShapelessJsonRecipe>(token, baseDir.getAbsolutePath() + "/" + "shapelessRecipes.json", ShapelessJsonRecipe.class);
+        smeltingReader = new JsonConfigReader<SmeltingJsonRecipe>(token, baseDir.getAbsolutePath() + "/" + "smeltingRecipes.json", SmeltingJsonRecipe.class);
+
         addIcons(assembler);
         addLangs(assembler);
         addCustoms(assembler);
@@ -102,14 +112,24 @@ public class ConfigHandler
 
     public static void init()
     {
-        ArmorType.addAll(armorReader.getElements());
-        ToolType.addAll(toolReader.getElements());
-        ItemType.addAll(itemReader.getElements());
-        RecordType.addAll(recordReader.getElements());
-
-        if (ItemType.getTypes().size() > 0)
+        addAll(armorReader.getElements());
+        addAll(toolReader.getElements());
+        addAll(itemReader.getElements());
+        addAll(recordReader.getElements());
+    }
+    
+    public static void postInit()
+    {
+        addAll(shapedReader.getElements());
+        addAll(shapelessReader.getElements());
+        addAll(smeltingReader.getElements());
+    }
+    
+    private static void addAll(Iterable<? extends IJsonType> types)
+    {
+        for (IJsonType type : types) 
         {
-            ItemType.getType(0).register();
+            type.register();
         }
     }
 }

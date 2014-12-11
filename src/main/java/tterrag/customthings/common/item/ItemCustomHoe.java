@@ -2,8 +2,8 @@ package tterrag.customthings.common.item;
 
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
-import tterrag.customthings.common.config.json.ToolType;
-import tterrag.customthings.common.config.json.ToolType.ToolClass;
+import tterrag.customthings.common.config.json.items.ToolType;
+import tterrag.customthings.common.config.json.items.ToolType.ToolClass;
 
 public class ItemCustomHoe extends ItemHoe implements ICustomTool
 {

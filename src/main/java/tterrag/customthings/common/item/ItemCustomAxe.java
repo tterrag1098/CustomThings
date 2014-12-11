@@ -1,7 +1,7 @@
 package tterrag.customthings.common.item;
 
-import tterrag.customthings.common.config.json.ToolType;
-import tterrag.customthings.common.config.json.ToolType.ToolClass;
+import tterrag.customthings.common.config.json.items.ToolType;
+import tterrag.customthings.common.config.json.items.ToolType.ToolClass;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 
