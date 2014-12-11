@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraftforge.common.util.EnumHelper;
+
+import org.apache.commons.lang3.ArrayUtils;
+
 import tterrag.customthings.CustomThings;
 import tterrag.customthings.common.item.ItemCustomArmor;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -16,10 +17,13 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class ArmorType extends JsonType
 {
     /* JSON Fields @formatter:off */
-    public int[]    armors            = {0, 1, 2, 3};
-    public int      durability        = 5;
-    public int[]    reductionAmounts  = {1, 3, 2, 1};
-    public int      enchantability    = 15;
+    public int[]    armors              = {0, 1, 2, 3};
+    public int[]    durabilities        = {150, 500, 400, 100};
+    public int[]    protectionDisplays  = {1, 3, 2, 1};
+    public double[] protectionRatios    = {0.1, 0.1, 0.1, 0.1};
+    public int[]    protectionMaxes     = {7, 20, 15, 5};
+    public int[]    priorities          = {0, 0, 0, 0};
+    public int      enchantability      = 15;
     /* End JSON Fields @formatter:on */
 
     private transient Item[] items;
@@ -34,7 +38,7 @@ public class ArmorType extends JsonType
     {
         return name + "Material";
     }
-
+    
     public ArmorMaterial getMaterial()
     {
         return ArmorMaterial.valueOf(getMaterialName());
@@ -75,7 +79,7 @@ public class ArmorType extends JsonType
 
     public static void addType(ArmorType type)
     {
-        EnumHelper.addArmorMaterial(type.getMaterialName(), type.durability, type.reductionAmounts, type.enchantability);
+        EnumHelper.addArmorMaterial(type.getMaterialName(), 0, type.protectionDisplays, type.enchantability); // dummy, used for enchantability
         types.add(type);
         type.register();
     }
