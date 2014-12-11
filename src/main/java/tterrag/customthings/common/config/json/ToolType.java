@@ -46,7 +46,7 @@ public class ToolType extends JsonType
     }
 
     /* JSON Fields @formatter:off */    
-    public String[]  tools      = {"PICKAXE", "SHOVEL", "AXE", "SWORD", "HOE"}; 
+    public String[]  tools          = {"PICKAXE", "SHOVEL", "AXE", "SWORD", "HOE"}; 
     public int       level          = 1;
     public int       durability     = 500;
     public float     efficiency     = 4.0f;

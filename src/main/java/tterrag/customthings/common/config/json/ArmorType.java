@@ -18,10 +18,10 @@ public class ArmorType extends JsonType
 {
     /* JSON Fields @formatter:off */
     public int[]    armors              = {0, 1, 2, 3};
-    public int[]    durabilities        = {150, 500, 400, 100};
-    public int[]    protectionDisplays  = {1, 3, 2, 1};
+    public int[]    durabilities        = {100, 400, 500, 150};
+    public int[]    protectionDisplays  = {1, 2, 3, 1};
     public double[] protectionRatios    = {0.1, 0.1, 0.1, 0.1};
-    public int[]    protectionMaxes     = {7, 20, 15, 5};
+    public int[]    protectionMaxes     = {5, 15, 20, 7};
     public int[]    priorities          = {0, 0, 0, 0};
     public int      enchantability      = 15;
     /* End JSON Fields @formatter:on */

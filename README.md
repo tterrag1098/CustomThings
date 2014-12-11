@@ -1,9 +1,8 @@
-CustomThings
+CustomThings [![Build Status](http://ci.tterrag.com/job/CustomThings/badge/icon)](http://ci.tterrag.com/job/CustomThings/)
 ============
 
-Adding basic custom items to minecraft via JSON files
+Adding custom items (and soon blocks) to minecraft via JSON files.
 
-Dev Builds
-============
+You can read documentation at [**the wiki**](https://github.com/tterrag1098/CustomThings/wiki)
 
-http://ci.tterrag.com/job/CustomThings/
+This mod *requires* [ttCore](http://ci.tterrag.com/job/ttCore/)
