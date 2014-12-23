@@ -1,53 +1,78 @@
 package tterrag.customthings.common.config.json;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.creativetab.CreativeTabs;
+import lombok.AllArgsConstructor;
+import net.minecraft.block.Block;
+import net.minecraft.block.Block.SoundType;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
-import scala.actors.threadpool.Arrays;
 import tterrag.core.common.json.JsonUtils;
 import tterrag.customthings.common.block.BlockCustom;
 import tterrag.customthings.common.item.ItemBlockCustom;
 
+import com.google.common.collect.Maps;
+
+import cpw.mods.fml.common.registry.GameRegistry;
+
 public class BlockType extends JsonType
 {
+    // we use this since there are no context-sensitive methods for material/sound
+    // so we must have a completely separate block for each "type"
+    @AllArgsConstructor
+    public enum BlockData
+    {
+        ROCK(Material.rock, Block.soundTypeStone),
+        DIRT(Material.ground, Block.soundTypeGravel),
+        WOOD(Material.wood, Block.soundTypeWood),
+        METAL(Material.iron, Block.soundTypeMetal),
+        GRASS(Material.grass, Block.soundTypeGrass),
+        GLASS(Material.glass, Block.soundTypeGlass),
+        WOOL(Material.cloth, Block.soundTypeCloth),
+        LEAF(Material.leaves, Block.soundTypeGrass),
+        SNOW(Material.snow, Block.soundTypeSnow);
+
+        public final Material material;
+        public final SoundType sound;
+    }
+
     /* JSON Fields @formatter:off */
+    public String    type         = "rock";
     public float     hardness     = 0.3f;
     public float     resistance   = 0.5f;
     public int       harvestLevel = 0;
     public String    toolType     = "";
     public String    soundType    = "cloth";
     public String[]  drops        = {};   // drops itself if empty
+    public int       minXp        = 0;
+    public int       maxXp        = 0;
     /* End JSON Fields @formatter:on */
 
     private transient ItemStack[] stackDrops;
 
-    private static int meta = 0, count = 0;
-    private static List<BlockCustom> blocks = new ArrayList<BlockCustom>();
+    private transient BlockData data;
+
+    private static Map<BlockData, List<BlockType>> blockTypes = Maps.newHashMap();
 
     @Override
     public void register()
     {
-        makeStackDrops();
+        initData();
 
-        int index = count % 16;
-
-        if (blocks.size() <= index)
+        List<BlockType> list = blockTypes.get(data);
+        if (list == null)
         {
-            BlockCustom block = new BlockCustom();
-            block.setCreativeTab(CreativeTabs.tabBlock);
-            GameRegistry.registerBlock(block, ItemBlockCustom.class, "block" + index);
-            blocks.add(block);
+            list = new ArrayList<BlockType>();
+            blockTypes.put(data, list);
         }
-
-        blocks.get(index).setType(this, meta);
-
-        meta = count++ % 16;
+        
+        list.add(this);
     }
 
-    private void makeStackDrops()
+    private void initData()
     {
         stackDrops = new ItemStack[drops.length];
         for (int i = 0; i < drops.length; i++)
@@ -55,9 +80,51 @@ public class BlockType extends JsonType
             ItemStack stack = (ItemStack) JsonUtils.parseStringIntoItemStack(drops[i]);
             stackDrops[i] = stack;
         }
+        
+        try
+        {
+            data = BlockData.valueOf(type.toUpperCase());
+        }
+        catch (IllegalArgumentException e)
+        {
+            throw new RuntimeException(type + " is not a valid block type. Valid types are: " + Arrays.toString(BlockData.values()), e);
+        }
+    }
+    
+    private static int meta = 0;
+    public static void registerBlocks()
+    {
+        int blockNum = 0;
+        for (BlockData type : BlockData.values())
+        {
+            List<BlockType> blocks = blockTypes.get(type);
+            if (blocks != null)
+            {
+                BlockCustom realBlock = new BlockCustom(type);
+                for (BlockType block : blocks)
+                {
+                    realBlock.setType(block, meta++);
+                    if (meta > 15)
+                    {
+                        registerBlock(realBlock, blockNum++);
+                        realBlock = new BlockCustom(type);
+                        meta = 0;
+                    }
+                }
+                if (meta != 0)
+                {
+                    registerBlock(realBlock, blockNum++);
+                }
+                meta = 0;
+            }
+        }
     }
 
-    @SuppressWarnings("unchecked")
+    private static void registerBlock(BlockCustom block, int index)
+    {
+        GameRegistry.registerBlock(block, ItemBlockCustom.class, "block" + index);
+    }
+
     public ArrayList<ItemStack> getStackDrops()
     {
         ArrayList<ItemStack> stacks = new ArrayList<ItemStack>();

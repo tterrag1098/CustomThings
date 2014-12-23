@@ -1,23 +1,29 @@
 package tterrag.customthings.common.block;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import tterrag.customthings.common.config.json.BlockType;
+import tterrag.customthings.common.config.json.BlockType.BlockData;
 
 public class BlockCustom extends Block
 {
-    private BlockType[] types = new BlockType[16];
+    public final BlockType[] types = new BlockType[16];
+    private static final Random rand = new Random();
     
-    public BlockCustom()
+    public BlockCustom(BlockData type)
     {
-        super(Material.cloth);
+        super(type.material);
+        setStepSound(type.sound);
         setHardness(0.3f);
         setResistance(0.5f);
+        setCreativeTab(CreativeTabs.tabBlock);
     }
     
     public void setType(BlockType type, int meta)
@@ -57,6 +63,13 @@ public class BlockCustom extends Block
     public int damageDropped(int metadata)
     {
         return metadata;
+    }
+    
+    @Override
+    public int getExpDrop(IBlockAccess world, int metadata, int fortune)
+    {
+        BlockType type = types[metadata];
+        return type == null ? 0 : rand.nextInt(type.maxXp - type.minXp + 1) + type.minXp;
     }
     
     private BlockType getType(World world, int x, int y, int z)

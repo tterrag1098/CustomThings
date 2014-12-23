@@ -11,6 +11,7 @@ import tterrag.core.common.json.JsonUtils;
 import tterrag.core.common.util.ResourcePackAssembler;
 import tterrag.core.common.util.TTFileUtils;
 import tterrag.customthings.CustomThings;
+import tterrag.customthings.common.config.json.BlockType;
 import tterrag.customthings.common.config.json.IJsonType;
 import tterrag.customthings.common.config.json.crafting.ShapedJsonRecipe;
 import tterrag.customthings.common.config.json.crafting.ShapelessJsonRecipe;
@@ -33,6 +34,7 @@ public class ConfigHandler
     private static JsonConfigReader<ToolType> toolReader;
     private static JsonConfigReader<ItemType> itemReader;
     private static JsonConfigReader<RecordType> recordReader;
+    private static JsonConfigReader<BlockType> blockReader;
     private static JsonConfigReader<ShapedJsonRecipe> shapedReader;
     private static JsonConfigReader<ShapelessJsonRecipe> shapelessReader;
     private static JsonConfigReader<SmeltingJsonRecipe> smeltingReader;
@@ -49,7 +51,8 @@ public class ConfigHandler
         armorReader = new JsonConfigReader<ArmorType>(token, baseDir.getAbsolutePath() + "/" + "customArmors.json", ArmorType.class);
         toolReader = new JsonConfigReader<ToolType>(token, baseDir.getAbsolutePath() + "/" + "customTools.json", ToolType.class);
         itemReader = new JsonConfigReader<ItemType>(token, baseDir.getAbsolutePath() + "/" + "customItems.json", ItemType.class);
-        recordReader = new JsonConfigReader<RecordType>(token, baseDir.getAbsoluteFile() + "/" + "customRecords.json", RecordType.class);
+        recordReader = new JsonConfigReader<RecordType>(token, baseDir.getAbsolutePath() + "/" + "customRecords.json", RecordType.class);
+        blockReader = new JsonConfigReader<BlockType>(token, baseDir.getAbsolutePath() + "/" + "customBlocks.json", BlockType.class);
         shapedReader = new JsonConfigReader<ShapedJsonRecipe>(token, baseDir.getAbsolutePath() + "/" + "shapedRecipes.json", ShapedJsonRecipe.class);
         shapelessReader = new JsonConfigReader<ShapelessJsonRecipe>(token, baseDir.getAbsolutePath() + "/" + "shapelessRecipes.json", ShapelessJsonRecipe.class);
         smeltingReader = new JsonConfigReader<SmeltingJsonRecipe>(token, baseDir.getAbsolutePath() + "/" + "smeltingRecipes.json", SmeltingJsonRecipe.class);
@@ -116,6 +119,9 @@ public class ConfigHandler
         addAll(toolReader.getElements());
         addAll(itemReader.getElements());
         addAll(recordReader.getElements());
+        addAll(blockReader.getElements());
+        
+        BlockType.registerBlocks();
     }
     
     public static void postInit()
