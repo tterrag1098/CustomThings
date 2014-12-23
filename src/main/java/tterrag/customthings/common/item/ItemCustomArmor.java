@@ -1,5 +1,6 @@
 package tterrag.customthings.common.item;
 
+import lombok.Getter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,6 +14,7 @@ import tterrag.customthings.common.config.json.items.ArmorType;
 public class ItemCustomArmor extends ItemArmor implements ISpecialArmor
 {
     private String textureName;
+    @Getter
     private ArmorType type;
     public ItemCustomArmor(ArmorType type, int slot)
     {
@@ -55,5 +57,11 @@ public class ItemCustomArmor extends ItemArmor implements ISpecialArmor
     public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage, int slot)
     {
         stack.damageItem(damage, entity);
+    }
+    
+    @Override
+    public boolean getIsRepairable(ItemStack stack, ItemStack material)
+    {
+        return ItemCustomPickaxe.repairMatMatchesOredict(stack, material);
     }
 }

@@ -7,6 +7,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import tterrag.customthings.common.config.json.items.ArmorType;
 import tterrag.customthings.common.config.json.items.ToolType;
 import tterrag.customthings.common.config.json.items.ToolType.ToolClass;
 
@@ -37,11 +38,21 @@ public class ItemCustomPickaxe extends ItemPickaxe implements ICustomTool
     public static boolean repairMatMatchesOredict(ItemStack stack, ItemStack material)
     {
         Item item = stack.getItem();
+        ItemStack repairMat = null;
+        
         if (item instanceof ICustomTool)
         {
             ToolType tool = ((ICustomTool) item).getType();
-            ItemStack repairMat = tool.getRepairMat();
-
+            repairMat = tool.getRepairMat();
+        }
+        else if (item instanceof ItemCustomArmor)
+        {
+            ArmorType armor = ((ItemCustomArmor) item).getType();
+            repairMat = armor.getRepairMat();
+        }
+        
+        if (repairMat != null)
+        {
             int[] oreIds = OreDictionary.getOreIDs(repairMat);
             int[] oreIdsToMatch = OreDictionary.getOreIDs(material);
 

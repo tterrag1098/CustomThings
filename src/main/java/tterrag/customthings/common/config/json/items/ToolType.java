@@ -24,7 +24,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ToolType extends JsonType
 {
-    public static enum ToolClass
+    public enum ToolClass
     {
         PICKAXE (ItemCustomPickaxe.class), 
         SHOVEL  (ItemCustomShovel.class), 
@@ -109,8 +109,13 @@ public class ToolType extends JsonType
             }
         }
         
-        repairMat = material.equals("null") ? null : JsonUtils.parseStringIntoItemStack(material);
         types.add(this);
+    }
+    
+    @Override
+    public void postInit()
+    {
+        repairMat = material.equals("null") ? null : JsonUtils.parseStringIntoItemStack(material);
     }
 
     private Item instantiate(ToolClass clazz)

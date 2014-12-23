@@ -3,12 +3,15 @@ package tterrag.customthings.common.config.json.items;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.EnumHelper;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import tterrag.core.common.json.JsonUtils;
 import tterrag.customthings.CustomThings;
 import tterrag.customthings.common.config.json.JsonType;
 import tterrag.customthings.common.item.ItemCustomArmor;
@@ -24,9 +27,13 @@ public class ArmorType extends JsonType
     public int[]    protectionMaxes     = {5, 15, 20, 7};
     public int[]    priorities          = {0, 0, 0, 0};
     public int      enchantability      = 15;
+    public String   material            = "null";
     /* End JSON Fields @formatter:on */
 
     private transient Item[] items;
+    
+    @Getter
+    private transient ItemStack repairMat;
 
     public String getTextureName(int armorType)
     {
@@ -61,6 +68,12 @@ public class ArmorType extends JsonType
             }
         }
         types.add(this);
+    }
+    
+    @Override
+    public void postInit()
+    {
+        repairMat = material.equals("null") ? null : JsonUtils.parseStringIntoItemStack(material);
     }
 
     public String getUnlocName(int slot)
