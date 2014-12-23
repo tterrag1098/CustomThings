@@ -13,11 +13,12 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import tterrag.core.common.json.JsonUtils;
 import tterrag.customthings.CustomThings;
+import tterrag.customthings.common.config.json.IHasMaterial;
 import tterrag.customthings.common.config.json.JsonType;
 import tterrag.customthings.common.item.ItemCustomArmor;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class ArmorType extends JsonType
+public class ArmorType extends JsonType implements IHasMaterial
 {
     /* JSON Fields @formatter:off */
     public int[]    armors              = {0, 1, 2, 3};

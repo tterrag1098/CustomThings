@@ -13,8 +13,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import tterrag.core.common.json.JsonUtils;
 import tterrag.customthings.CustomThings;
+import tterrag.customthings.common.config.json.IHasMaterial;
 import tterrag.customthings.common.config.json.JsonType;
-import tterrag.customthings.common.item.ICustomTool;
+import tterrag.customthings.common.item.ICustomRepair;
 import tterrag.customthings.common.item.ItemCustomAxe;
 import tterrag.customthings.common.item.ItemCustomHoe;
 import tterrag.customthings.common.item.ItemCustomPickaxe;
@@ -22,7 +23,7 @@ import tterrag.customthings.common.item.ItemCustomShovel;
 import tterrag.customthings.common.item.ItemCustomSword;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class ToolType extends JsonType
+public class ToolType extends JsonType implements IHasMaterial
 {
     public enum ToolClass
     {
@@ -32,9 +33,9 @@ public class ToolType extends JsonType
         SWORD   (ItemCustomSword.class), 
         HOE     (ItemCustomHoe.class);
 
-        public final Class<? extends ICustomTool> itemClass;
+        public final Class<? extends ICustomRepair> itemClass;
 
-        ToolClass(Class<? extends ICustomTool> itemClass)
+        ToolClass(Class<? extends ICustomRepair> itemClass)
         {
             this.itemClass = itemClass;
         }

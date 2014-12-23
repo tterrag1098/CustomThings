@@ -2,10 +2,11 @@ package tterrag.customthings.common.item;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import tterrag.customthings.common.config.json.IHasMaterial;
 import tterrag.customthings.common.config.json.items.ToolType;
 import tterrag.customthings.common.config.json.items.ToolType.ToolClass;
 
-public class ItemCustomSword extends ItemSword implements ICustomTool
+public class ItemCustomSword extends ItemSword implements ICustomRepair
 {
     private ToolType type;
     
@@ -18,7 +19,7 @@ public class ItemCustomSword extends ItemSword implements ICustomTool
     }
     
     @Override
-    public ToolType getType()
+    public IHasMaterial getType()
     {
         return type;
     }
