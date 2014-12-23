@@ -52,4 +52,21 @@ public class ItemCustom extends Item
     {
         return damage < icons.length ? icons[damage] : null;
     }
+    
+    @Override
+    public boolean hasContainerItem(ItemStack stack)
+    {
+        return ItemType.getType(stack.getItemDamage()).getContainerItem() != null;
+    }
+    
+    @Override
+    public ItemStack getContainerItem(ItemStack stack)
+    {
+        ItemStack container = ItemType.getType(stack.getItemDamage()).getContainerItem();
+        if (container != null)
+        {
+            return container.copy();
+        }
+        return null;
+    }
 }
