@@ -35,7 +35,7 @@ public class BlockCustom extends Block
     public boolean isToolEffective(String tool, int metadata)
     {
         BlockType type = types[metadata];
-        return type == null ? super.isToolEffective(tool, metadata) : type.toolType.isEmpty() ? true : tool.equals(type.toolType);
+        return type.toolType.isEmpty() ? super.isToolEffective(tool, metadata) : tool.equals(type.toolType);
     }
     
     @Override

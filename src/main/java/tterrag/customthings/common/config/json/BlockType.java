@@ -3,6 +3,7 @@ package tterrag.customthings.common.config.json;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import lombok.AllArgsConstructor;
@@ -45,7 +46,6 @@ public class BlockType extends JsonType
     public float     resistance   = 0.5f;
     public int       harvestLevel = 0;
     public String    toolType     = "";
-    public String    soundType    = "cloth";
     public String[]  drops        = {};   // drops itself if empty
     public int       minXp        = 0;
     public int       maxXp        = 0;
@@ -83,7 +83,7 @@ public class BlockType extends JsonType
         
         try
         {
-            data = BlockData.valueOf(type.toUpperCase());
+            data = BlockData.valueOf(type.toUpperCase(Locale.ENGLISH));
         }
         catch (IllegalArgumentException e)
         {

@@ -37,13 +37,13 @@ public class ItemType extends JsonType
             item = new ItemCustom();
             GameRegistry.registerItem(item, "customthings.item");
         }
-        
+
+        types.add(this);
+
         if (container != null)
         {
-            containerItem = JsonUtils.parseStringIntoItemStack(container);
+            containerItem = "this".equals(container) ? new ItemStack(item, 1, types.indexOf(this)) : JsonUtils.parseStringIntoItemStack(container);
         }
-        
-        types.add(this);
     }
 
     public static ItemType getType(int damage)
