@@ -43,4 +43,10 @@ public class ShapelessJsonRecipe implements IJsonType
             super(text);
         }
     }
+
+    @Override
+    public void postInit()
+    {
+        ;
+    }
 }

@@ -11,16 +11,25 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
+import tterrag.core.TTCore;
+import tterrag.core.api.common.load.ILoadEventReceiver;
 import tterrag.core.common.json.JsonUtils;
 import tterrag.customthings.common.block.BlockCustom;
 import tterrag.customthings.common.item.ItemBlockCustom;
 
 import com.google.common.collect.Maps;
 
+import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class BlockType extends JsonType
+public class BlockType extends JsonType implements ILoadEventReceiver<FMLPostInitializationEvent>
 {
+    static
+    {
+        // we need a single object to respond to this event and call static register method
+        TTCore.instance.registerLoadEventReceiver(new BlockType());
+    }
+
     // we use this since there are no context-sensitive methods for material/sound
     // so we must have a completely separate block for each "type"
     @AllArgsConstructor
@@ -68,19 +77,12 @@ public class BlockType extends JsonType
             list = new ArrayList<BlockType>();
             blockTypes.put(data, list);
         }
-        
+
         list.add(this);
     }
 
     private void initData()
     {
-        stackDrops = new ItemStack[drops.length];
-        for (int i = 0; i < drops.length; i++)
-        {
-            ItemStack stack = (ItemStack) JsonUtils.parseStringIntoItemStack(drops[i]);
-            stackDrops[i] = stack;
-        }
-        
         try
         {
             data = BlockData.valueOf(type.toUpperCase(Locale.ENGLISH));
@@ -90,8 +92,20 @@ public class BlockType extends JsonType
             throw new RuntimeException(type + " is not a valid block type. Valid types are: " + Arrays.toString(BlockData.values()), e);
         }
     }
-    
+
+    @Override
+    public void postInit()
+    {
+        stackDrops = new ItemStack[drops.length];
+        for (int i = 0; i < drops.length; i++)
+        {
+            ItemStack stack = (ItemStack) JsonUtils.parseStringIntoItemStack(drops[i]);
+            stackDrops[i] = stack;
+        }
+    }
+
     private static int meta = 0;
+
     public static void registerBlocks()
     {
         int blockNum = 0;
@@ -138,5 +152,17 @@ public class BlockType extends JsonType
             stacks.addAll(Arrays.asList(stackDrops));
             return stacks;
         }
+    }
+
+    @Override
+    public void onEvent(FMLPostInitializationEvent event)
+    {
+        registerBlocks();
+    }
+
+    @Override
+    public Class<FMLPostInitializationEvent> getEventClass()
+    {
+        return FMLPostInitializationEvent.class;
     }
 }

@@ -2,6 +2,7 @@ package tterrag.customthings.common.config;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.List;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 
@@ -21,6 +22,7 @@ import tterrag.customthings.common.config.json.items.ItemType;
 import tterrag.customthings.common.config.json.items.RecordType;
 import tterrag.customthings.common.config.json.items.ToolType;
 
+import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -113,6 +115,8 @@ public class ConfigHandler
         temp.mkdirs();
     }
 
+    private static List<IJsonType> allTypesCache = Lists.newArrayList();
+    
     public static void init()
     {
         addAll(armorReader.getElements());
@@ -129,6 +133,11 @@ public class ConfigHandler
         addAll(shapedReader.getElements());
         addAll(shapelessReader.getElements());
         addAll(smeltingReader.getElements());
+        
+        for (IJsonType type : allTypesCache)
+        {
+            type.postInit();
+        }
     }
     
     private static void addAll(Iterable<? extends IJsonType> types)
@@ -136,6 +145,7 @@ public class ConfigHandler
         for (IJsonType type : types) 
         {
             type.register();
+            allTypesCache.add(type);
         }
     }
 }

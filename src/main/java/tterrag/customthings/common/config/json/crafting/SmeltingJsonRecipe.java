@@ -38,4 +38,10 @@ public class SmeltingJsonRecipe implements IJsonType
             super(text);
         }
     }
+
+    @Override
+    public void postInit()
+    {
+        ;
+    }
 }

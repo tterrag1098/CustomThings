@@ -39,7 +39,11 @@ public class ItemType extends JsonType
         }
 
         types.add(this);
-
+    }
+    
+    @Override
+    public void postInit()
+    {
         if (container != null)
         {
             containerItem = "this".equals(container) ? new ItemStack(item, 1, types.indexOf(this)) : JsonUtils.parseStringIntoItemStack(container);
