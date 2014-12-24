@@ -45,6 +45,16 @@ public class RecordType extends JsonType
     {
         return types.size();
     }
+    
+    public static int getLootRecordCount()
+    {
+        int count = 0;
+        for (RecordType type : types)
+        {
+            count += type.isCreeperLoot ? 1 : 0;
+        }
+        return count;
+    }
 
     public static Item getItem(int index)
     {

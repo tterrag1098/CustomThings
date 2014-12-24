@@ -55,7 +55,7 @@ public class LivingDropsHandler
         {
             if (item.getEntityItem().getItem() instanceof ItemRecord)
             {
-                int max = 12 + RecordType.getNumRecords();
+                int max = 12 + RecordType.getLootRecordCount();
                 int random = rand.nextInt(max);
                 ItemStack record;
                 if (random < 12)
