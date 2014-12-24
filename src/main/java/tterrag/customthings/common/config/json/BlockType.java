@@ -11,25 +11,16 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
-import tterrag.core.TTCore;
-import tterrag.core.api.common.load.ILoadEventReceiver;
 import tterrag.core.common.json.JsonUtils;
 import tterrag.customthings.common.block.BlockCustom;
 import tterrag.customthings.common.item.ItemBlockCustom;
 
 import com.google.common.collect.Maps;
 
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class BlockType extends JsonType implements ILoadEventReceiver<FMLPostInitializationEvent>
+public class BlockType extends JsonType
 {
-    static
-    {
-        // we need a single object to respond to this event and call static register method
-        TTCore.instance.registerLoadEventReceiver(new BlockType());
-    }
-
     // we use this since there are no context-sensitive methods for material/sound
     // so we must have a completely separate block for each "type"
     @AllArgsConstructor
@@ -58,6 +49,7 @@ public class BlockType extends JsonType implements ILoadEventReceiver<FMLPostIni
     public String[]  drops        = {};   // drops itself if empty
     public int       minXp        = 0;
     public int       maxXp        = 0;
+    public int[]     textureMap   = null; // handled appropriately
     /* End JSON Fields @formatter:on */
 
     private transient ItemStack[] stackDrops;
@@ -152,17 +144,5 @@ public class BlockType extends JsonType implements ILoadEventReceiver<FMLPostIni
             stacks.addAll(Arrays.asList(stackDrops));
             return stacks;
         }
-    }
-
-    @Override
-    public void onEvent(FMLPostInitializationEvent event)
-    {
-        registerBlocks();
-    }
-
-    @Override
-    public Class<FMLPostInitializationEvent> getEventClass()
-    {
-        return FMLPostInitializationEvent.class;
     }
 }

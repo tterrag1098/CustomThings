@@ -3,18 +3,27 @@ package tterrag.customthings.common.block;
 import java.util.ArrayList;
 import java.util.Random;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import tterrag.customthings.CustomThings;
 import tterrag.customthings.common.config.json.BlockType;
 import tterrag.customthings.common.config.json.BlockType.BlockData;
 
 public class BlockCustom extends Block
 {
     public final BlockType[] types = new BlockType[16];
+    
+    @SideOnly(Side.CLIENT)
+    private IIcon[][] icons;
+    
     private static final Random rand = new Random();
     
     public BlockCustom(BlockData type)
@@ -29,6 +38,44 @@ public class BlockCustom extends Block
     public void setType(BlockType type, int meta)
     {
         types[meta % types.length] = type;
+    }
+    
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void registerBlockIcons(IIconRegister register)
+    {
+        icons = new IIcon[16][6];
+        for (int i = 0; i < types.length; i++)
+        {
+            BlockType type = types[i];
+            if (type != null)
+            {
+                if (type.textureMap == null)
+                {
+                    icons[i][0] = register.registerIcon(CustomThings.MODID.toLowerCase() + ":" + type.name);
+                }
+                else
+                {
+                    for (int j = 0; j < type.textureMap.length; j++)
+                    {
+                        int side = type.textureMap[j];
+                        icons[i][j] =  register.registerIcon(CustomThings.MODID.toLowerCase() + ":" + type.name + side);
+                    }
+                }
+            }
+        }
+    }
+    
+    @Override
+    public IIcon getIcon(int side, int meta)
+    {
+        return types[meta].textureMap == null ? icons[meta][0] : icons[meta][side];
+    }
+    
+    @Override
+    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
+    {
+        return getIcon(side, world.getBlockMetadata(x, y, z));
     }
     
     @Override

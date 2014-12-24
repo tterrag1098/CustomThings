@@ -78,10 +78,8 @@ public class ConfigHandler
     private static void addLangs(ResourcePackAssembler assembler)
     {
         initialize("lang");
-        for (File f : new File(baseDir.getAbsolutePath() + "/lang").listFiles(TTFileUtils.langFilter))
-        {
-            assembler.addLang(f);
-        }
+        File langDir = new File(baseDir.getAbsolutePath() + "/lang");
+        TTFileUtils.loadLangFiles(langDir);
     }
 
     private static void addCustoms(ResourcePackAssembler assembler)
