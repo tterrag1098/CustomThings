@@ -3,8 +3,11 @@ package tterrag.customthings.common.config.json.items;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemRecord;
+import net.minecraftforge.oredict.OreDictionary;
 import tterrag.customthings.common.config.json.JsonType;
 import tterrag.customthings.common.item.ItemCustomRecord;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -24,6 +27,8 @@ public class RecordType extends JsonType
         item = new ItemCustomRecord(name);
         GameRegistry.registerItem(item, name);
         types.add(this);
+        OreDictionary.registerOre("record", item);
+        OreDictionary.registerOre("record" + StringUtils.capitalize(name), item);
     }
 
     private static final List<RecordType> types = new ArrayList<RecordType>();

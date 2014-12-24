@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
+
 import lombok.AllArgsConstructor;
 import net.minecraft.block.Block;
 import net.minecraft.block.Block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import tterrag.core.common.json.JsonUtils;
 import tterrag.customthings.common.block.BlockCustom;
 import tterrag.customthings.common.item.ItemBlockCustom;
@@ -50,6 +53,7 @@ public class BlockType extends JsonType
     public int       minXp        = 0;
     public int       maxXp        = 0;
     public int[]     textureMap   = null; // handled appropriately
+    public String[]  oreDictNames = null;
     /* End JSON Fields @formatter:on */
 
     private transient ItemStack[] stackDrops;
@@ -129,6 +133,23 @@ public class BlockType extends JsonType
     private static void registerBlock(BlockCustom block, int index)
     {
         GameRegistry.registerBlock(block, ItemBlockCustom.class, "block" + index);
+        
+        for (int i = 0; i < block.types.length; i++)
+        {
+            BlockType type = block.types[i];
+            if (type != null)
+            {
+                ItemStack stack = new ItemStack(block, 1, i);
+                OreDictionary.registerOre("block" + StringUtils.capitalize(type.name), stack);
+                if (type.oreDictNames != null)
+                {
+                    for (String s : type.oreDictNames)
+                    {
+                        OreDictionary.registerOre(s, stack);
+                    }
+                }
+            }
+        }
     }
 
     public ArrayList<ItemStack> getStackDrops()
