@@ -1,0 +1,16 @@
+[
+{
+  "modid": "customthings",
+  "name": "CustomThings",
+  "description": "Adding custom items and blocks via JSON files.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "http://ci.tterrag.com",
+  "updateUrl": "http://ci.tterrag.com/job/CustomThings",
+  "authors": ["tterrag"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
