@@ -66,8 +66,12 @@ public class ShapedJsonRecipe implements IJsonType
 
         for (int i = STARTING_VALUE; i <= getHighestCharValue(cur); i++)
         {
-            toAdd.add((char) i);
-            toAdd.add(inputIterator.next());
+            Object obj = inputIterator.next();
+            if (obj != null)
+            {
+                toAdd.add((char) i);
+                toAdd.add(obj);
+            }
         }
 
         output.stackSize = this.outputAmount;
