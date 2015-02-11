@@ -12,6 +12,7 @@ import tterrag.core.common.json.JsonUtils;
 import tterrag.core.common.util.ResourcePackAssembler;
 import tterrag.core.common.util.TTFileUtils;
 import tterrag.customthings.CustomThings;
+import tterrag.customthings.common.config.json.AchievementType;
 import tterrag.customthings.common.config.json.BlockType;
 import tterrag.customthings.common.config.json.IJsonType;
 import tterrag.customthings.common.config.json.crafting.ShapedJsonRecipe;
@@ -40,7 +41,8 @@ public class ConfigHandler
     private static JsonConfigReader<ShapedJsonRecipe> shapedReader;
     private static JsonConfigReader<ShapelessJsonRecipe> shapelessReader;
     private static JsonConfigReader<SmeltingJsonRecipe> smeltingReader;
-
+    private static JsonConfigReader<AchievementType> achievementReader;
+    
     private static ResourcePackAssembler assembler;
 
     public static void preInit(FMLPreInitializationEvent event)
@@ -58,7 +60,8 @@ public class ConfigHandler
         shapedReader = new JsonConfigReader<ShapedJsonRecipe>(token, baseDir.getAbsolutePath() + "/" + "shapedRecipes.json", ShapedJsonRecipe.class);
         shapelessReader = new JsonConfigReader<ShapelessJsonRecipe>(token, baseDir.getAbsolutePath() + "/" + "shapelessRecipes.json", ShapelessJsonRecipe.class);
         smeltingReader = new JsonConfigReader<SmeltingJsonRecipe>(token, baseDir.getAbsolutePath() + "/" + "smeltingRecipes.json", SmeltingJsonRecipe.class);
-
+        achievementReader = new JsonConfigReader<AchievementType>(token, baseDir.getAbsolutePath() + "/" + "customAchievements.json", AchievementType.class);
+        
         addIcons(assembler);
         addLangs(assembler);
         addCustoms(assembler);
@@ -78,8 +81,10 @@ public class ConfigHandler
     private static void addLangs(ResourcePackAssembler assembler)
     {
         initialize("lang");
-        File langDir = new File(baseDir.getAbsolutePath() + "/lang");
-        TTFileUtils.loadLangFiles(langDir);
+        for (File f : new File(baseDir.getAbsolutePath() + "/lang").listFiles(TTFileUtils.langFilter))
+        {
+            assembler.addLang(f);
+        }
     }
 
     private static void addCustoms(ResourcePackAssembler assembler)
@@ -131,7 +136,8 @@ public class ConfigHandler
         addAll(shapedReader.getElements());
         addAll(shapelessReader.getElements());
         addAll(smeltingReader.getElements());
-        
+        addAll(achievementReader.getElements());
+
         for (IJsonType type : allTypesCache)
         {
             type.postInit();
