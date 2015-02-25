@@ -2,11 +2,8 @@ package tterrag.customthings.common.config.json;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 import java.util.Locale;
-import java.util.Map;
-
-import org.apache.commons.lang3.StringUtils;
 
 import lombok.AllArgsConstructor;
 import net.minecraft.block.Block;
@@ -14,11 +11,15 @@ import net.minecraft.block.Block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import org.apache.commons.lang3.StringUtils;
+
 import tterrag.core.common.json.JsonUtils;
 import tterrag.customthings.common.block.BlockCustom;
 import tterrag.customthings.common.item.ItemBlockCustom;
 
-import com.google.common.collect.Maps;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 
 import cpw.mods.fml.common.registry.GameRegistry;
 
@@ -60,21 +61,13 @@ public class BlockType extends JsonType
 
     private transient BlockData data;
 
-    private static Map<BlockData, List<BlockType>> blockTypes = Maps.newHashMap();
+    private static Multimap<BlockData, BlockType> blockTypes = ArrayListMultimap.create();
 
     @Override
     public void register()
     {
         initData();
-
-        List<BlockType> list = blockTypes.get(data);
-        if (list == null)
-        {
-            list = new ArrayList<BlockType>();
-            blockTypes.put(data, list);
-        }
-
-        list.add(this);
+        blockTypes.put(data, this);
     }
 
     private void initData()
@@ -107,8 +100,8 @@ public class BlockType extends JsonType
         int blockNum = 0;
         for (BlockData type : BlockData.values())
         {
-            List<BlockType> blocks = blockTypes.get(type);
-            if (blocks != null)
+            Collection<BlockType> blocks = blockTypes.get(type);
+            if (!blocks.isEmpty())
             {
                 BlockCustom realBlock = new BlockCustom(type);
                 for (BlockType block : blocks)
