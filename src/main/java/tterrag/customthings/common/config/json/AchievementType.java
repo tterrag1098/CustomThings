@@ -125,8 +125,9 @@ public class AchievementType extends JsonType
     public String page = null; // null means minecraft
     public String parent = null;
     public String source = "CRAFTING";
-    public String displayItem = "minecraft:stone";
     public String required = "minecraft:stone";
+    public String displayItem = null; // null means show required item
+    public boolean isSpecial = false;
     /* End JSON Fields @formatter:on */
 
     private transient Achievement parentAchievement = null;
@@ -152,10 +153,20 @@ public class AchievementType extends JsonType
             }
         }
 
+        if (displayItem == null)
+        {
+            displayItem = required;
+        }
+
         achievement = new Achievement(name, name, x, y, JsonUtils.parseStringIntoItemStack(displayItem), parentAchievement);
+
         if (parentAchievement == null)
         {
             achievement.initIndependentStat();
+        }
+        if (isSpecial)
+        {
+            achievement.setSpecial();
         }
 
         AchievementPage achievementPage = page == null ? null : AchievementPage.getAchievementPage(page);
