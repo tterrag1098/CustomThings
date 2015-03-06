@@ -36,10 +36,10 @@ public class ItemType extends JsonType
     @Override
     public void register()
     {
-        if (item == null)
+        if (getItem() == null)
         {
             item = new ItemCustom();
-            GameRegistry.registerItem(item, "customthings.item");
+            GameRegistry.registerItem(getItem(), "item");
         }
 
         types.add(this);
@@ -66,7 +66,7 @@ public class ItemType extends JsonType
 
     public ItemStack getStack()
     {
-        return new ItemStack(item, 1, types.indexOf(this));
+        return new ItemStack(getItem(), 1, types.indexOf(this));
     }
 
     public static ItemType getType(int damage)
@@ -77,5 +77,10 @@ public class ItemType extends JsonType
     public static List<ItemType> getTypes()
     {
         return types;
+    }
+
+    public static Item getItem()
+    {
+        return item;
     }
 }

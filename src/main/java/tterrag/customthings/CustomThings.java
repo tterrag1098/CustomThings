@@ -5,11 +5,15 @@ import tterrag.core.IModTT;
 import tterrag.core.common.compat.CompatabilityRegistry;
 import tterrag.core.common.util.RegisterTime;
 import tterrag.customthings.common.config.ConfigHandler;
+import tterrag.customthings.common.config.json.items.ItemType;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import cpw.mods.fml.common.event.FMLMissingMappingsEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLMissingMappingsEvent.MissingMapping;
+import cpw.mods.fml.common.registry.GameRegistry;
 
 @Mod(modid = MODID, name = NAME, version = VERSION, dependencies = DEPENDENCIES)
 public class CustomThings implements IModTT
@@ -36,6 +40,18 @@ public class CustomThings implements IModTT
     public void postInit(FMLPostInitializationEvent event)
     {
         ConfigHandler.postInit();
+    }
+    
+    @EventHandler
+    public void onMissingMapping(FMLMissingMappingsEvent event)
+    {
+        for (MissingMapping m : event.get())
+        {
+            if (m.type == GameRegistry.Type.ITEM && m.name.contains("customthings.item"))
+            {
+                m.remap(ItemType.getItem());
+            }
+        }
     }
     
     @Override
