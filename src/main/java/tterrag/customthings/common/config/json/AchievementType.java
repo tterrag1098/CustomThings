@@ -108,7 +108,11 @@ public class AchievementType extends JsonType
                 if (in[0] instanceof EntityLivingBase)
                 {
                     String entityName = (String) EntityList.classToStringMapping.get(in[0].getClass());
-                    return entityName.toLowerCase().contains(((String) test).toLowerCase());
+                    if (entityName != null)
+                    {
+                        return entityName.toLowerCase().contains(((String) test).toLowerCase());
+                    }
+                    return in[0].getClass().getName().toLowerCase().contains(((String) test).toLowerCase());
                 }
                 return false;
             }
