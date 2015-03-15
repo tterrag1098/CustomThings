@@ -102,7 +102,7 @@ public class BlockCustom extends Block
     @Override
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
     {
-        BlockType type = getType(world, x, y, z);
+        BlockType type = getType(metadata);
         return type == null || type.drops.length == 0 ? super.getDrops(world, x, y, z, metadata, fortune) : type.getStackDrops();
     }
     
@@ -122,7 +122,12 @@ public class BlockCustom extends Block
     private BlockType getType(World world, int x, int y, int z)
     {
         int meta = world.getBlockMetadata(x, y, z);
-        return types[meta];
+        return getType(meta);
+    }
+    
+    private BlockType getType(int meta)
+    {
+        return types[meta % types.length];
     }
 
     public BlockType getType(ItemStack stack)
