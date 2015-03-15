@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
+import java.util.Random;
 
 import lombok.AllArgsConstructor;
 import net.minecraft.block.Block;
@@ -43,6 +44,20 @@ public class BlockType extends JsonType
         public final Material material;
         public final SoundType sound;
     }
+    
+    @AllArgsConstructor
+    private static class DropData
+    {
+        private static final Random rand = new Random();
+        
+        private final ItemStack stack;
+        private final int min, max;
+        
+        public int getRandomStackSize()
+        {
+            return rand.nextInt(max - min + 1) + min;
+        }
+    }
 
     /* JSON Fields @formatter:off */
     public String    type         = "rock";
@@ -57,7 +72,7 @@ public class BlockType extends JsonType
     public String[]  oreDictNames = null;
     /* End JSON Fields @formatter:on */
 
-    private transient ItemStack[] stackDrops;
+    private transient DropData[] stackDrops;
 
     private transient BlockData data;
 
@@ -85,11 +100,29 @@ public class BlockType extends JsonType
     @Override
     public void postInit()
     {
-        stackDrops = new ItemStack[drops.length];
+        stackDrops = new DropData[drops.length];
         for (int i = 0; i < drops.length; i++)
         {
-            ItemStack stack = (ItemStack) JsonUtils.parseStringIntoItemStack(drops[i]);
-            stackDrops[i] = stack;
+            String drop = drops[i];
+            if (drop.indexOf('#') == -1 || drop.indexOf('-') == -1)
+            {
+                ItemStack stack = (ItemStack) JsonUtils.parseStringIntoItemStack(drops[i]);
+                stackDrops[i] = new DropData(stack, stack.stackSize, stack.stackSize);
+            }
+            else
+            {
+                String range = drops[i].substring(drop.indexOf('#') + 1, drop.length());
+                String[] minmax = range.split("\\-");
+                try
+                {
+                    ItemStack stack = JsonUtils.parseStringIntoItemStack(drops[i].substring(0, drop.indexOf('#')));
+                    stackDrops[i] = new DropData(stack, Integer.valueOf(minmax[0]), Integer.valueOf(minmax[1]));
+                }
+                catch (NumberFormatException e)
+                {
+                    throw new RuntimeException("Could not parse drop amount range for block " + name, e);
+                }
+            }
         }
     }
 
@@ -155,7 +188,12 @@ public class BlockType extends JsonType
         }
         else
         {
-            stacks.addAll(Arrays.asList(stackDrops));
+            for (DropData data : stackDrops)
+            {
+                ItemStack stack = data.stack.copy();
+                stack.stackSize = data.getRandomStackSize();
+                stacks.add(stack);
+            }
             return stacks;
         }
     }
