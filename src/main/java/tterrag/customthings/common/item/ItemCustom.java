@@ -21,6 +21,7 @@ public class ItemCustom extends Item
     {
         super();
         setCreativeTab(CreativeTabs.tabMisc);
+        setHasSubtypes(true);
     }
 
     @Override
