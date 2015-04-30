@@ -63,6 +63,7 @@ public class ConfigHandler
         smeltingReader = new JsonConfigReader<SmeltingJsonRecipe>(token, baseDir.getAbsolutePath() + "/" + "smeltingRecipes.json", SmeltingJsonRecipe.class);
         achievementReader = new JsonConfigReader<AchievementType>(token, baseDir.getAbsolutePath() + "/" + "customAchievements.json", AchievementType.class);
 
+        assembleResourcePack();
     }
     
     public static void assembleResourcePack()

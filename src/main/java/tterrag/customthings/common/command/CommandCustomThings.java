@@ -25,6 +25,12 @@ public class CommandCustomThings extends CommandBase
     }
 
     @Override
+    public int getRequiredPermissionLevel()
+    {
+        return 0;
+    }
+
+    @Override
     public void processCommand(ICommandSender p_71515_1_, String[] args)
     {
         if (args.length < 1)
