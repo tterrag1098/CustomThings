@@ -51,8 +51,6 @@ public class ConfigHandler
     public static void preInit(FMLPreInitializationEvent event)
     {
         baseDir = new File(event.getSuggestedConfigurationFile().getParent() + "/" + CustomThings.MODID);
-        assembler = new ResourcePackAssembler(new File(baseDir.getAbsolutePath() + "/CustomThings-Resourcepack"), "Custom Things Resource Pack", CustomThings.MODID);
-        // .setHasPackPng(CustomThings.class);
 
         ModToken token = new ModToken(CustomThings.class, CustomThings.MODID + "/misc");
         armorReader = new JsonConfigReader<ArmorType>(token, baseDir.getAbsolutePath() + "/" + "customArmors.json", ArmorType.class);
@@ -64,6 +62,13 @@ public class ConfigHandler
         shapelessReader = new JsonConfigReader<ShapelessJsonRecipe>(token, baseDir.getAbsolutePath() + "/" + "shapelessRecipes.json", ShapelessJsonRecipe.class);
         smeltingReader = new JsonConfigReader<SmeltingJsonRecipe>(token, baseDir.getAbsolutePath() + "/" + "smeltingRecipes.json", SmeltingJsonRecipe.class);
         achievementReader = new JsonConfigReader<AchievementType>(token, baseDir.getAbsolutePath() + "/" + "customAchievements.json", AchievementType.class);
+
+    }
+    
+    public static void assembleResourcePack()
+    {
+        assembler = new ResourcePackAssembler(new File(baseDir.getAbsolutePath() + "/CustomThings-Resourcepack"), "Custom Things Resource Pack", CustomThings.MODID);
+        // .setHasPackPng(CustomThings.class);
         
         addIcons(assembler);
         addLangs(assembler);

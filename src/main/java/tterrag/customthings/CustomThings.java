@@ -1,9 +1,11 @@
 package tterrag.customthings;
 
 import static tterrag.customthings.CustomThings.*;
+import net.minecraftforge.client.ClientCommandHandler;
 import tterrag.core.IModTT;
 import tterrag.core.common.compat.CompatabilityRegistry;
 import tterrag.core.common.util.RegisterTime;
+import tterrag.customthings.common.command.CommandCustomThings;
 import tterrag.customthings.common.config.ConfigHandler;
 import tterrag.customthings.common.config.json.items.ItemType;
 import cpw.mods.fml.common.Mod;
@@ -22,26 +24,30 @@ public class CustomThings implements IModTT
     public static final String NAME = "Custom Things";
     public static final String VERSION = "@VERSION@";
     public static final String DEPENDENCIES = "after:ttCore";
-    
+
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
         ConfigHandler.preInit(event);
         CompatabilityRegistry.INSTANCE.registerCompat(RegisterTime.POSTINIT, "tterrag.customthings.common.nei.NEIHider", "NotEnoughItems");
+        if (event.getSide().isClient())
+        {
+            ClientCommandHandler.instance.registerCommand(new CommandCustomThings());
+        }
     }
-    
+
     @EventHandler
     public void init(FMLInitializationEvent event)
     {
         ConfigHandler.init();
     }
-    
+
     @EventHandler
     public void postInit(FMLPostInitializationEvent event)
     {
         ConfigHandler.postInit();
     }
-    
+
     @EventHandler
     public void onMissingMapping(FMLMissingMappingsEvent event)
     {
@@ -53,7 +59,7 @@ public class CustomThings implements IModTT
             }
         }
     }
-    
+
     @Override
     public String modid()
     {
