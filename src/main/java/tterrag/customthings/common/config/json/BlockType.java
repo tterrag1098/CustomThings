@@ -68,7 +68,7 @@ public class BlockType extends JsonType
     public String[]  drops        = {};   // drops itself if empty
     public int       minXp        = 0;
     public int       maxXp        = 0;
-    public String[]     textureMap   = null; // handled appropriately
+    public String[]  textureMap   = null; // handled appropriately
     public String[]  oreDictNames = null;
     /* End JSON Fields @formatter:on */
 

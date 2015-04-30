@@ -11,7 +11,7 @@ import tterrag.customthings.common.config.json.IHasMaterial;
 import tterrag.customthings.common.config.json.items.ToolType;
 import tterrag.customthings.common.config.json.items.ToolType.ToolClass;
 
-public class ItemCustomPickaxe extends ItemPickaxe implements ICustomRepair
+public class ItemCustomPickaxe extends ItemPickaxe implements ICustomRepair<ToolType>
 {
     private ToolType type;
 
@@ -24,7 +24,7 @@ public class ItemCustomPickaxe extends ItemPickaxe implements ICustomRepair
     }
 
     @Override
-    public IHasMaterial getType()
+    public ToolType getType(ItemStack stack)
     {
         return type;
     }
@@ -35,13 +35,14 @@ public class ItemCustomPickaxe extends ItemPickaxe implements ICustomRepair
         return repairMatMatchesOredict(stack, material);
     }
 
+    @SuppressWarnings("unchecked")
     public static boolean repairMatMatchesOredict(ItemStack stack, ItemStack material)
     {
         Item item = stack.getItem();
         
-        if (item instanceof ICustomRepair)
+        if (item instanceof ICustomRepair<?>)
         {
-            IHasMaterial tool = ((ICustomRepair) item).getType();
+            IHasMaterial tool = ((ICustomRepair<ToolType>) item).getType(stack);
             ItemStack repairMat = tool.getRepairMat();
 
             int[] oreIds = OreDictionary.getOreIDs(repairMat);

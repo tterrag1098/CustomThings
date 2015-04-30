@@ -3,16 +3,17 @@ package tterrag.customthings.common.config.json.items;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemRecord;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import tterrag.customthings.common.config.json.JsonType;
+
+import org.apache.commons.lang3.StringUtils;
+
 import tterrag.customthings.common.item.ItemCustomRecord;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class RecordType extends JsonType
+public class RecordType extends ItemType
 {
     /* JSON Fields @formatter:off */
     public int color = 0xFF70FF;
@@ -29,6 +30,7 @@ public class RecordType extends JsonType
         types.add(this);
         OreDictionary.registerOre("record", item);
         OreDictionary.registerOre("record" + StringUtils.capitalize(name), item);
+        addOreDictNames(new ItemStack(item));
     }
 
     private static final List<RecordType> types = new ArrayList<RecordType>();

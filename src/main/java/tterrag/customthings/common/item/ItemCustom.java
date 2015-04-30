@@ -12,7 +12,7 @@ import tterrag.customthings.common.config.json.items.ItemType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemCustom extends Item
+public class ItemCustom extends Item implements ICustomItem<ItemType>
 {
     @SideOnly(Side.CLIENT)
     private IIcon[] icons;
@@ -50,7 +50,7 @@ public class ItemCustom extends Item
     @Override
     public String getUnlocalizedName(ItemStack stack)
     {
-        return ItemType.getType(stack.getItemDamage()).getUnlocName();
+        return getType(stack).getUnlocName();
     }
 
     @Override
@@ -68,17 +68,23 @@ public class ItemCustom extends Item
     @Override
     public boolean hasContainerItem(ItemStack stack)
     {
-        return ItemType.getType(stack.getItemDamage()).getContainerItem() != null;
+        return getType(stack).getContainerItem() != null;
     }
 
     @Override
     public ItemStack getContainerItem(ItemStack stack)
     {
-        ItemStack container = ItemType.getType(stack.getItemDamage()).getContainerItem();
+        ItemStack container = getType(stack).getContainerItem();
         if (container != null)
         {
             return container.copy();
         }
         return null;
+    }
+
+    @Override
+    public ItemType getType(ItemStack stack)
+    {
+        return ItemType.getType(stack.getItemDamage() % ItemType.getTypes().size());
     }
 }

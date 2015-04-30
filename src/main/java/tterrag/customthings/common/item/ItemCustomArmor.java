@@ -11,7 +11,7 @@ import net.minecraftforge.common.ISpecialArmor;
 import tterrag.customthings.CustomThings;
 import tterrag.customthings.common.config.json.items.ArmorType;
 
-public class ItemCustomArmor extends ItemArmor implements ISpecialArmor, ICustomRepair
+public class ItemCustomArmor extends ItemArmor implements ISpecialArmor, ICustomRepair<ArmorType>
 {
     private String textureName;
     @Getter
@@ -63,5 +63,11 @@ public class ItemCustomArmor extends ItemArmor implements ISpecialArmor, ICustom
     public boolean getIsRepairable(ItemStack stack, ItemStack material)
     {
         return ItemCustomPickaxe.repairMatMatchesOredict(stack, material);
+    }
+    
+    @Override
+    public ArmorType getType(ItemStack stack)
+    {
+        return type;
     }
 }

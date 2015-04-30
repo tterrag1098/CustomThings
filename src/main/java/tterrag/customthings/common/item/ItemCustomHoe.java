@@ -2,11 +2,10 @@ package tterrag.customthings.common.item;
 
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
-import tterrag.customthings.common.config.json.IHasMaterial;
 import tterrag.customthings.common.config.json.items.ToolType;
 import tterrag.customthings.common.config.json.items.ToolType.ToolClass;
 
-public class ItemCustomHoe extends ItemHoe implements ICustomRepair
+public class ItemCustomHoe extends ItemHoe implements ICustomRepair<ToolType>
 {
     private ToolType type;
     
@@ -19,7 +18,7 @@ public class ItemCustomHoe extends ItemHoe implements ICustomRepair
     }
     
     @Override
-    public IHasMaterial getType()
+    public ToolType getType(ItemStack stack)
     {
         return type;
     }

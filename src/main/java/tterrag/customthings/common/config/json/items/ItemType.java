@@ -18,8 +18,9 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class ItemType extends JsonType
 {
     /* JSON Fields @formatter:off */
-    private String      container       = null;
-    private String[]    oreDictNames    = null;
+    public String      container       = null;
+    public String[]    oreDictNames    = null;
+    public String      flavorText      = null;
     /* End JSON Fields @formatter:on */
 
     @Getter
@@ -47,6 +48,11 @@ public class ItemType extends JsonType
 
         ItemStack stack = getStack();
         OreDictionary.registerOre("item" + StringUtils.capitalize(name), stack);
+        addOreDictNames(stack);
+    }
+
+    protected void addOreDictNames(ItemStack stack)
+    {
         if (oreDictNames != null)
         {
             for (String s : oreDictNames)

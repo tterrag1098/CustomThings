@@ -8,13 +8,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.oredict.OreDictionary;
 
 import org.apache.commons.lang3.StringUtils;
 
 import tterrag.core.common.json.JsonUtils;
 import tterrag.customthings.CustomThings;
 import tterrag.customthings.common.config.json.IHasMaterial;
-import tterrag.customthings.common.config.json.JsonType;
 import tterrag.customthings.common.item.ICustomRepair;
 import tterrag.customthings.common.item.ItemCustomAxe;
 import tterrag.customthings.common.item.ItemCustomHoe;
@@ -23,7 +23,7 @@ import tterrag.customthings.common.item.ItemCustomShovel;
 import tterrag.customthings.common.item.ItemCustomSword;
 import cpw.mods.fml.common.registry.GameRegistry;
 
-public class ToolType extends JsonType implements IHasMaterial
+public class ToolType extends ItemType implements IHasMaterial
 {
     public enum ToolClass
     {
@@ -33,9 +33,9 @@ public class ToolType extends JsonType implements IHasMaterial
         SWORD   (ItemCustomSword.class), 
         HOE     (ItemCustomHoe.class);
 
-        public final Class<? extends ICustomRepair> itemClass;
+        public final Class<? extends ICustomRepair<ToolType>> itemClass;
 
-        ToolClass(Class<? extends ICustomRepair> itemClass)
+        ToolClass(Class<? extends ICustomRepair<ToolType>> itemClass)
         {
             this.itemClass = itemClass;
         }
@@ -80,7 +80,7 @@ public class ToolType extends JsonType implements IHasMaterial
 
     @Override
     public void register()
-    {        
+    {
         EnumHelper.addToolMaterial(name, level, durability, efficiency, damage, enchantability);
 
         for (ToolClass clazz : getToolClasses())
@@ -90,22 +90,27 @@ public class ToolType extends JsonType implements IHasMaterial
             case PICKAXE:
                 pickaxe = instantiate(clazz);
                 GameRegistry.registerItem(pickaxe, clazz.getUnlocName(name));
+                addOreDictNames(new ItemStack(pickaxe, 1, OreDictionary.WILDCARD_VALUE));
                 break;
             case AXE:
                 axe = instantiate(clazz);
                 GameRegistry.registerItem(axe, clazz.getUnlocName(name));
+                addOreDictNames(new ItemStack(axe, 1, OreDictionary.WILDCARD_VALUE));
                 break;
             case HOE:
                 hoe = instantiate(clazz);
                 GameRegistry.registerItem(hoe, clazz.getUnlocName(name));
+                addOreDictNames(new ItemStack(hoe, 1, OreDictionary.WILDCARD_VALUE));
                 break;
             case SHOVEL:
                 shovel = instantiate(clazz);
                 GameRegistry.registerItem(shovel, clazz.getUnlocName(name));
+                addOreDictNames(new ItemStack(shovel, 1, OreDictionary.WILDCARD_VALUE));
                 break;
             case SWORD:
                 sword = instantiate(clazz);
                 GameRegistry.registerItem(sword, clazz.getUnlocName(name));
+                addOreDictNames(new ItemStack(sword, 1, OreDictionary.WILDCARD_VALUE));
                 break;
             }
         }

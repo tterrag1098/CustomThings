@@ -9,7 +9,7 @@ import tterrag.customthings.common.config.json.items.RecordType;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
-public class ItemCustomRecord extends ItemRecord
+public class ItemCustomRecord extends ItemRecord implements ICustomItem<RecordType>
 {   
     public ItemCustomRecord(String name)
     {
@@ -46,10 +46,16 @@ public class ItemCustomRecord extends ItemRecord
     {
         return icons[pass % icons.length];
     }
-    
+
     @Override
     public int getColorFromItemStack(ItemStack stack, int pass)
     {
         return pass == 0 ? 0xFFFFFF : RecordType.getColor(stack.getItem());
+    }
+
+    @Override
+    public RecordType getType(ItemStack stack)
+    {
+        return RecordType.getType(stack.getItemDamage() % RecordType.getTypes().size());
     }
 }
