@@ -3,12 +3,13 @@ package tterrag.customthings.common.config.json.items;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
-
 import lombok.Getter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import org.apache.commons.lang3.StringUtils;
+
 import tterrag.core.common.json.JsonUtils;
 import tterrag.customthings.common.config.json.JsonType;
 import tterrag.customthings.common.item.ItemCustom;

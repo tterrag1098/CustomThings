@@ -39,7 +39,7 @@ public class BlockCustom extends Block
     {
         types[meta % types.length] = type;
     }
-    
+
     @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister register)
@@ -58,20 +58,20 @@ public class BlockCustom extends Block
                 {
                     for (int j = 0; j < type.textureMap.length; j++)
                     {
-                        int side = type.textureMap[j];
-                        icons[i][j] =  register.registerIcon(CustomThings.MODID.toLowerCase() + ":" + type.name + side);
+                        String tex = type.textureMap[j];
+                        icons[i][j] = register.registerIcon(CustomThings.MODID.toLowerCase() + ":" + tex);
                     }
                 }
             }
         }
     }
-    
+
     @Override
     public IIcon getIcon(int side, int meta)
     {
         return types[meta].textureMap == null ? icons[meta][0] : icons[meta][side];
     }
-    
+
     @Override
     public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
     {

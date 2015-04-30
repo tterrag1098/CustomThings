@@ -8,7 +8,6 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 
 import tterrag.core.common.config.JsonConfigReader;
 import tterrag.core.common.config.JsonConfigReader.ModToken;
-import tterrag.core.common.json.JsonUtils;
 import tterrag.core.common.util.ResourcePackAssembler;
 import tterrag.core.common.util.TTFileUtils;
 import tterrag.customthings.CustomThings;
@@ -24,6 +23,8 @@ import tterrag.customthings.common.config.json.items.RecordType;
 import tterrag.customthings.common.config.json.items.ToolType;
 
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -31,6 +32,8 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class ConfigHandler
 {
+    public static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
     public static File baseDir;
 
     private static JsonConfigReader<ArmorType> armorReader;
@@ -104,7 +107,7 @@ public class ConfigHandler
             event.add("sounds", sounds);
             root.add("records." + CustomThings.MODID + "." + getSimpleName(f), event); // event name (same as name sent to ItemCustomRecord)
         }
-        assembler.addCustomFile("assets/minecraft", TTFileUtils.writeToFile(baseDir.getAbsolutePath() + "/recordMusic/sounds.json", JsonUtils.gson.toJson(root)));
+        assembler.addCustomFile("assets/minecraft", TTFileUtils.writeToFile(baseDir.getAbsolutePath() + "/recordMusic/sounds.json", gson.toJson(root)));
     }
 
     private static String getSimpleName(File file)
