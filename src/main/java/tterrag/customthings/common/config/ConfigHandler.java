@@ -28,6 +28,7 @@ import tterrag.customthings.common.config.json.items.ArmorType;
 import tterrag.customthings.common.config.json.items.ItemType;
 import tterrag.customthings.common.config.json.items.RecordType;
 import tterrag.customthings.common.config.json.items.ToolType;
+import tterrag.difficultyrecipes.util.Difficulty;
 
 import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
@@ -35,22 +36,18 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.InstanceCreator;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class ConfigHandler
 {
-    private static class EnumMapInstanceCreator<V extends IJsonType> implements InstanceCreator<EnumMap<EnumDifficulty, V>>
+    private static class EnumMapInstanceCreator<V extends IJsonType> implements InstanceCreator<EnumMap<Difficulty, V>>
     {
         @Override
-        public EnumMap<EnumDifficulty, V> createInstance(final Type type)
+        public EnumMap<Difficulty, V> createInstance(final Type type)
         {
-            return new EnumMap<EnumDifficulty, V>(EnumDifficulty.class);
+            return new EnumMap<Difficulty, V>(Difficulty.class);
         }
     };
     
@@ -92,30 +89,17 @@ public class ConfigHandler
 
         if (CompatUtil.isDifficultyRecipesLoaded())
         {            
-            JsonDeserializer<EnumDifficulty> deserializer = new JsonDeserializer<EnumDifficulty>()
-            {
-                @Override
-                public EnumDifficulty deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
-                {
-                    if (json.isJsonPrimitive())
-                    {
-                        String name = json.getAsString();
-                        EnumDifficulty diff = EnumDifficulty.valueOf(name);
-                        return diff;
-                    }
-                    return null;
-                }
-            };
-            
             EnumMapInstanceCreator<ShapedJsonDifficultyRecipe> creatorShaped = new EnumMapInstanceCreator<ShapedJsonDifficultyRecipe>();
             
             shapedDifficultyReader = new JsonConfigReader<ShapedJsonDifficultyRecipe>(token, baseDir.getAbsolutePath() + "/difficultyrecipes/shaped.json", ShapedJsonDifficultyRecipe.class);
-            shapedDifficultyReader.getBuilder().registerTypeAdapter(new TypeToken<EnumMap<EnumDifficulty, ShapedJsonRecipe>>(){}.getType(), creatorShaped).registerTypeAdapter(EnumDifficulty.class, deserializer);
+            shapedDifficultyReader.getBuilder().registerTypeAdapter(new TypeToken<EnumMap<Difficulty, ShapedJsonRecipe>>(){}.getType(), creatorShaped);
+            CompatUtil.registerDifficultyAdapter(shapedDifficultyReader.getBuilder());
             
             EnumMapInstanceCreator<ShapelessJsonDifficultyRecipe> creatorShapeless = new EnumMapInstanceCreator<ShapelessJsonDifficultyRecipe>();
             
             shapelessDifficultyReader = new JsonConfigReader<ShapelessJsonDifficultyRecipe>(token, baseDir.getAbsolutePath() + "/difficultyrecipes/shapeless.json", ShapelessJsonDifficultyRecipe.class);
-            shapelessDifficultyReader.getBuilder().registerTypeAdapter(new TypeToken<EnumMap<EnumDifficulty, ShapelessJsonRecipe>>(){}.getType(), creatorShapeless).registerTypeAdapter(EnumDifficulty.class, deserializer);
+            shapelessDifficultyReader.getBuilder().registerTypeAdapter(new TypeToken<EnumMap<Difficulty, ShapelessJsonRecipe>>(){}.getType(), creatorShapeless);
+            CompatUtil.registerDifficultyAdapter(shapelessDifficultyReader.getBuilder());
         }
 
         assembleResourcePack();
