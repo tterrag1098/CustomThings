@@ -2,7 +2,11 @@ package tterrag.customthings.common.config;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.lang.reflect.Type;
+import java.util.EnumMap;
 import java.util.List;
+
+import net.minecraft.world.EnumDifficulty;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
 
@@ -11,27 +15,45 @@ import tterrag.core.common.config.JsonConfigReader.ModToken;
 import tterrag.core.common.util.ResourcePackAssembler;
 import tterrag.core.common.util.TTFileUtils;
 import tterrag.customthings.CustomThings;
+import tterrag.customthings.common.compat.CompatUtil;
 import tterrag.customthings.common.config.json.AchievementType;
 import tterrag.customthings.common.config.json.BlockType;
 import tterrag.customthings.common.config.json.IJsonType;
 import tterrag.customthings.common.config.json.crafting.ShapedJsonRecipe;
 import tterrag.customthings.common.config.json.crafting.ShapelessJsonRecipe;
 import tterrag.customthings.common.config.json.crafting.SmeltingJsonRecipe;
+import tterrag.customthings.common.config.json.crafting.difficultyrecipes.ShapedJsonDifficultyRecipe;
+import tterrag.customthings.common.config.json.crafting.difficultyrecipes.ShapelessJsonDifficultyRecipe;
 import tterrag.customthings.common.config.json.items.ArmorType;
 import tterrag.customthings.common.config.json.items.ItemType;
 import tterrag.customthings.common.config.json.items.RecordType;
 import tterrag.customthings.common.config.json.items.ToolType;
 
 import com.google.common.collect.Lists;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.InstanceCreator;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 
 public class ConfigHandler
 {
+    private static class EnumMapInstanceCreator<V extends IJsonType> implements InstanceCreator<EnumMap<EnumDifficulty, V>>
+    {
+        @Override
+        public EnumMap<EnumDifficulty, V> createInstance(final Type type)
+        {
+            return new EnumMap<EnumDifficulty, V>(EnumDifficulty.class);
+        }
+    };
+    
     public static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public static File baseDir;
@@ -46,8 +68,12 @@ public class ConfigHandler
     private static JsonConfigReader<SmeltingJsonRecipe> smeltingReader;
     private static JsonConfigReader<AchievementType> achievementReader;
     
+    private static JsonConfigReader<ShapedJsonDifficultyRecipe> shapedDifficultyReader;
+    private static JsonConfigReader<ShapelessJsonDifficultyRecipe> shapelessDifficultyReader;
+
     private static ResourcePackAssembler assembler;
 
+    @SuppressWarnings("serial")
     public static void preInit(FMLPreInitializationEvent event)
     {
         baseDir = new File(event.getSuggestedConfigurationFile().getParent() + "/" + CustomThings.MODID);
@@ -61,7 +87,36 @@ public class ConfigHandler
         shapedReader = new JsonConfigReader<ShapedJsonRecipe>(token, baseDir.getAbsolutePath() + "/" + "shapedRecipes.json", ShapedJsonRecipe.class);
         shapelessReader = new JsonConfigReader<ShapelessJsonRecipe>(token, baseDir.getAbsolutePath() + "/" + "shapelessRecipes.json", ShapelessJsonRecipe.class);
         smeltingReader = new JsonConfigReader<SmeltingJsonRecipe>(token, baseDir.getAbsolutePath() + "/" + "smeltingRecipes.json", SmeltingJsonRecipe.class);
-        achievementReader = new JsonConfigReader<AchievementType>(token, baseDir.getAbsolutePath() + "/" + "customAchievements.json", AchievementType.class);
+        achievementReader = new JsonConfigReader<AchievementType>(token, baseDir.getAbsolutePath() + "/" + "customAchievements.json",
+                AchievementType.class);
+
+        if (CompatUtil.isDifficultyRecipesLoaded())
+        {            
+            JsonDeserializer<EnumDifficulty> deserializer = new JsonDeserializer<EnumDifficulty>()
+            {
+                @Override
+                public EnumDifficulty deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException
+                {
+                    if (json.isJsonPrimitive())
+                    {
+                        String name = json.getAsString();
+                        EnumDifficulty diff = EnumDifficulty.valueOf(name);
+                        return diff;
+                    }
+                    return null;
+                }
+            };
+            
+            EnumMapInstanceCreator<ShapedJsonDifficultyRecipe> creatorShaped = new EnumMapInstanceCreator<ShapedJsonDifficultyRecipe>();
+            
+            shapedDifficultyReader = new JsonConfigReader<ShapedJsonDifficultyRecipe>(token, baseDir.getAbsolutePath() + "/difficultyrecipes/shaped.json", ShapedJsonDifficultyRecipe.class);
+            shapedDifficultyReader.getBuilder().registerTypeAdapter(new TypeToken<EnumMap<EnumDifficulty, ShapedJsonRecipe>>(){}.getType(), creatorShaped).registerTypeAdapter(EnumDifficulty.class, deserializer);
+            
+            EnumMapInstanceCreator<ShapelessJsonDifficultyRecipe> creatorShapeless = new EnumMapInstanceCreator<ShapelessJsonDifficultyRecipe>();
+            
+            shapelessDifficultyReader = new JsonConfigReader<ShapelessJsonDifficultyRecipe>(token, baseDir.getAbsolutePath() + "/difficultyrecipes/shapeless.json", ShapelessJsonDifficultyRecipe.class);
+            shapelessDifficultyReader.getBuilder().registerTypeAdapter(new TypeToken<EnumMap<EnumDifficulty, ShapelessJsonRecipe>>(){}.getType(), creatorShapeless).registerTypeAdapter(EnumDifficulty.class, deserializer);
+        }
 
         assembleResourcePack();
     }
@@ -139,13 +194,19 @@ public class ConfigHandler
         
         BlockType.registerBlocks();
     }
-    
+
     public static void postInit()
     {
         addAll(shapedReader.getElements());
         addAll(shapelessReader.getElements());
         addAll(smeltingReader.getElements());
         addAll(achievementReader.getElements());
+
+        if (CompatUtil.isDifficultyRecipesLoaded())
+        {
+            addAll(shapedDifficultyReader.getElements());
+            addAll(shapelessDifficultyReader.getElements());
+        }
 
         for (IJsonType type : allTypesCache)
         {

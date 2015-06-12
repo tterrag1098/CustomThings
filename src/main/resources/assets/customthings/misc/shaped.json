@@ -1,0 +1,25 @@
+{"data":
+	[
+        {
+            "recipes": {
+                "PEACEFUL": {
+                    "input":[
+                        ["minecraft:stone", "gemDiamond"],
+                        ["minecraft:diamond", "stone"],
+                        ["null", "minecraft:stone"]],
+                    "output":"minecraft:gold_ingot",
+                    "outputAmount":2
+                },
+                "EASY": {
+                    "input":[
+                        ["minecraft:obsidian", "gemEmerald"],
+                        ["minecraft:emerald", "obsidian"],
+                        ["null", "minecraft:obsidian"]],
+                    "output":"minecraft:gold_ingot",
+                    "outputAmount":1             
+                }
+            },
+            "defaultDiff": "EASY"
+        }
+	]
+}

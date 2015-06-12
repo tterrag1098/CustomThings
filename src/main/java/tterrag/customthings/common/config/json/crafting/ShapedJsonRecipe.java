@@ -17,15 +17,14 @@ public class ShapedJsonRecipe implements IJsonType
     private String output;
     private int outputAmount = 1;
     private static final int STARTING_VALUE = Character.valueOf('a');
-    
-    @Override
-    public void register()
+
+    public ShapedOreRecipe createRecipe()
     {
         if (this.input == null || this.output == null)
         {
             throw new InvalidShapedRecipeException((this.input == null ? "Input was null" : "Output was null") + ". You must define this value.");
         }
-        
+
         int height = this.input.length;
         int width = this.input[getMaxLengthIndex(this.input)].length;
 
@@ -75,7 +74,14 @@ public class ShapedJsonRecipe implements IJsonType
         }
 
         output.stackSize = this.outputAmount;
-        GameRegistry.addRecipe(new ShapedOreRecipe(output.copy(), toAdd.toArray()));
+
+        return new ShapedOreRecipe(output.copy(), toAdd.toArray());
+    }
+
+    @Override
+    public void register()
+    {
+        GameRegistry.addRecipe(createRecipe());
     }
 
     private static int getHighestCharValue(String cur)
@@ -106,9 +112,9 @@ public class ShapedJsonRecipe implements IJsonType
         }
         return index;
     }
-    
+
     @SuppressWarnings("serial")
-    private static class InvalidShapedRecipeException extends RuntimeException 
+    private static class InvalidShapedRecipeException extends RuntimeException
     {
         public InvalidShapedRecipeException(String text)
         {

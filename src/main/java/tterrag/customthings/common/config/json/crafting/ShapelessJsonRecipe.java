@@ -15,26 +15,31 @@ public class ShapelessJsonRecipe implements IJsonType
     public String output;
     public int outputAmount = 1;
 
-    @Override
-    public void register()
+    public ShapelessOreRecipe createRecipe()
     {
         if (this.input == null || this.output == null)
         {
             throw new InvalidShapelessRecipeException((this.input == null ? "Input was null" : "Output was null") + ". You must define this value.");
         }
-        
+
         List<Object> inputs = new ArrayList<Object>();
         for (String input : this.input)
         {
             inputs.add(JsonUtils.parseStringIntoRecipeItem(input));
         }
-        
+
         ItemStack output = (ItemStack) JsonUtils.parseStringIntoRecipeItem(this.output, true);
-        
+
         output.stackSize = this.outputAmount;
-        GameRegistry.addRecipe(new ShapelessOreRecipe(output, inputs.toArray()));
+        return new ShapelessOreRecipe(output, inputs.toArray());
     }
-    
+
+    @Override
+    public void register()
+    {
+        GameRegistry.addRecipe(createRecipe());
+    }
+
     @SuppressWarnings("serial")
     private static class InvalidShapelessRecipeException extends RuntimeException
     {
