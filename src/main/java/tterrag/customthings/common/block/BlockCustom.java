@@ -98,11 +98,19 @@ public class BlockCustom extends Block
     {
         BlockType type = getType(meta);
         ItemStack held = player.getHeldItem();
+        int harvestLevel = getHarvestLevel(meta);
         if (type.toolType.isEmpty() || held == null)
         {
             return super.canHarvestBlock(player, meta);
         }
-        return held.getItem().getToolClasses(held).contains(type.toolType);
+        return held.getItem().getHarvestLevel(held, getHarvestTool(meta)) >= harvestLevel &&
+               held.getItem().getToolClasses(held).contains(type.toolType);
+    }
+    
+    @Override
+    public int getHarvestLevel(int metadata)
+    {
+        return getType(metadata).harvestLevel;
     }
 
     @Override
