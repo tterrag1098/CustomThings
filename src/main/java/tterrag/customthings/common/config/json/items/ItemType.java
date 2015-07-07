@@ -25,6 +25,7 @@ public class ItemType extends JsonType
     public String[] oreDictNames    = null;
     public String   flavorText      = null;
     public int      maxStackSize    = 64;
+    public int      burnTime        = 0;
     /* End JSON Fields @formatter:on */
 
     @Getter
@@ -49,6 +50,7 @@ public class ItemType extends JsonType
     public void register()
     {
         maxStackSize = MathHelper.clamp_int(maxStackSize, 1, 64);
+        burnTime = Math.max(0, burnTime);
         
         if (getItem() == null)
         {
