@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.Getter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.oredict.OreDictionary;
 
 import org.apache.commons.lang3.StringUtils;
@@ -20,9 +21,10 @@ import cpw.mods.fml.common.registry.GameRegistry;
 public class ItemType extends JsonType
 {
     /* JSON Fields @formatter:off */
-    public String      container       = null;
-    public String[]    oreDictNames    = null;
-    public String      flavorText      = null;
+    public String   container       = null;
+    public String[] oreDictNames    = null;
+    public String   flavorText      = null;
+    public int      maxStackSize    = 64;
     /* End JSON Fields @formatter:on */
 
     @Getter
@@ -46,6 +48,8 @@ public class ItemType extends JsonType
     @Override
     public void register()
     {
+        maxStackSize = MathHelper.clamp_int(maxStackSize, 1, 64);
+        
         if (getItem() == null)
         {
             item = new ItemCustom();

@@ -46,6 +46,12 @@ public class ItemCustom extends Item implements ICustomItem<ItemType>
             list.add(new ItemStack(item, 1, i));
         }
     }
+    
+    @Override
+    public int getItemStackLimit(ItemStack stack)
+    {
+        return getType(stack).maxStackSize;
+    }
 
     @Override
     public String getUnlocalizedName(ItemStack stack)
