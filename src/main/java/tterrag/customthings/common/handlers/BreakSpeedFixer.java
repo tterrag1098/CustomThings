@@ -3,10 +3,12 @@ package tterrag.customthings.common.handlers;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
-import tterrag.core.common.Handlers.Handler;
-import tterrag.core.common.Handlers.Handler.HandlerType;
 import tterrag.customthings.common.block.BlockCustom;
 import tterrag.customthings.common.config.json.BlockType;
+
+import com.enderio.core.common.Handlers.Handler;
+import com.enderio.core.common.Handlers.Handler.HandlerType;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 @Handler(HandlerType.FORGE)

@@ -15,10 +15,10 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import org.apache.commons.lang3.StringUtils;
 
-import tterrag.core.common.json.JsonUtils;
 import tterrag.customthings.common.block.BlockCustom;
 import tterrag.customthings.common.item.ItemBlockCustom;
 
+import com.enderio.core.common.util.ItemUtil;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 
@@ -106,7 +106,7 @@ public class BlockType extends JsonType
             String drop = drops[i];
             if (drop.indexOf('#') == -1 || drop.indexOf('-') == -1)
             {
-                ItemStack stack = (ItemStack) JsonUtils.parseStringIntoItemStack(drops[i]);
+                ItemStack stack = (ItemStack) ItemUtil.parseStringIntoItemStack(drops[i]);
                 stackDrops[i] = new DropData(stack, stack.stackSize, stack.stackSize);
             }
             else
@@ -115,7 +115,7 @@ public class BlockType extends JsonType
                 String[] minmax = range.split("\\-");
                 try
                 {
-                    ItemStack stack = JsonUtils.parseStringIntoItemStack(drops[i].substring(0, drop.indexOf('#')));
+                    ItemStack stack = ItemUtil.parseStringIntoItemStack(drops[i].substring(0, drop.indexOf('#')));
                     stackDrops[i] = new DropData(stack, Integer.valueOf(minmax[0]), Integer.valueOf(minmax[1]));
                 }
                 catch (NumberFormatException e)

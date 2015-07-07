@@ -5,8 +5,10 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
-import tterrag.core.common.json.JsonUtils;
 import tterrag.customthings.common.config.json.IJsonType;
+
+import com.enderio.core.common.util.ItemUtil;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ShapelessJsonRecipe implements IJsonType
@@ -25,10 +27,10 @@ public class ShapelessJsonRecipe implements IJsonType
         List<Object> inputs = new ArrayList<Object>();
         for (String input : this.input)
         {
-            inputs.add(JsonUtils.parseStringIntoRecipeItem(input));
+            inputs.add(ItemUtil.parseStringIntoRecipeItem(input));
         }
 
-        ItemStack output = (ItemStack) JsonUtils.parseStringIntoRecipeItem(this.output, true);
+        ItemStack output = (ItemStack) ItemUtil.parseStringIntoRecipeItem(this.output, true);
 
         output.stackSize = this.outputAmount;
         return new ShapelessOreRecipe(output, inputs.toArray());

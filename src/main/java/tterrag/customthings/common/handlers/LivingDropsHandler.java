@@ -11,9 +11,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemRecord;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import tterrag.core.common.Handlers.Handler;
-import tterrag.core.common.Handlers.Handler.HandlerType;
 import tterrag.customthings.common.config.json.items.RecordType;
+
+import com.enderio.core.common.Handlers.Handler;
+import com.enderio.core.common.Handlers.Handler.HandlerType;
+
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 

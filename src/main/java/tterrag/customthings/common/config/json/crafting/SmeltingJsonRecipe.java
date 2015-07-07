@@ -1,8 +1,10 @@
 package tterrag.customthings.common.config.json.crafting;
 
 import net.minecraft.item.ItemStack;
-import tterrag.core.common.json.JsonUtils;
 import tterrag.customthings.common.config.json.IJsonType;
+
+import com.enderio.core.common.util.ItemUtil;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class SmeltingJsonRecipe implements IJsonType
@@ -19,8 +21,8 @@ public class SmeltingJsonRecipe implements IJsonType
             throw new InvalidSmeltingRecipeException((this.input == null ? "Input was null" : "Output was null") + ". You must define this value.");
         }
         
-        ItemStack input = (ItemStack) JsonUtils.parseStringIntoRecipeItem(this.input, true);
-        ItemStack output = (ItemStack) JsonUtils.parseStringIntoRecipeItem(this.output, true);
+        ItemStack input = (ItemStack) ItemUtil.parseStringIntoRecipeItem(this.input, true);
+        ItemStack output = (ItemStack) ItemUtil.parseStringIntoRecipeItem(this.output, true);
 
         output.stackSize = this.outputAmount;
         

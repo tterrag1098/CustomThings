@@ -7,8 +7,10 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-import tterrag.core.common.json.JsonUtils;
 import tterrag.customthings.common.config.json.IJsonType;
+
+import com.enderio.core.common.util.ItemUtil;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ShapedJsonRecipe implements IJsonType
@@ -34,11 +36,11 @@ public class ShapedJsonRecipe implements IJsonType
         {
             for (String s : arr)
             {
-                inputs.add(JsonUtils.parseStringIntoRecipeItem(s));
+                inputs.add(ItemUtil.parseStringIntoRecipeItem(s));
             }
         }
 
-        ItemStack output = (ItemStack) JsonUtils.parseStringIntoRecipeItem(this.output, true);
+        ItemStack output = (ItemStack) ItemUtil.parseStringIntoRecipeItem(this.output, true);
 
         Object[] recipeArr = new Object[height];
         String cur = null;

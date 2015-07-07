@@ -10,9 +10,11 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import org.apache.commons.lang3.StringUtils;
 
-import tterrag.core.common.json.JsonUtils;
 import tterrag.customthings.common.config.json.JsonType;
 import tterrag.customthings.common.item.ItemCustom;
+
+import com.enderio.core.common.util.ItemUtil;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ItemType extends JsonType
@@ -73,7 +75,7 @@ public class ItemType extends JsonType
     {
         if (container != null)
         {
-            containerItem = "this".equals(container) ? getStack() : JsonUtils.parseStringIntoItemStack(container);
+            containerItem = "this".equals(container) ? getStack() : ItemUtil.parseStringIntoItemStack(container);
         }
     }
 

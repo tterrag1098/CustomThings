@@ -11,9 +11,8 @@ import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.oredict.OreDictionary;
-import tterrag.core.common.json.JsonUtils;
-import tterrag.core.common.util.TTItemUtils;
 
+import com.enderio.core.common.util.ItemUtil;
 import com.google.common.collect.Lists;
 
 public class AchievementType extends JsonType
@@ -25,7 +24,7 @@ public class AchievementType extends JsonType
             @Override
             protected Object getObjectFromString(String s)
             {
-                return JsonUtils.parseStringIntoRecipeItem(s);
+                return ItemUtil.parseStringIntoRecipeItem(s);
             }
 
             @Override
@@ -36,7 +35,7 @@ public class AchievementType extends JsonType
                 {
                     if (test instanceof ItemStack)
                     {
-                        return TTItemUtils.itemStackMatchesOredict((ItemStack) test, (String) obj);
+                        return ItemUtil.itemStackMatchesOredict((ItemStack) test, (String) obj);
                     }
                     else
                     {
@@ -80,7 +79,7 @@ public class AchievementType extends JsonType
             @Override
             protected Object getObjectFromString(String s)
             {
-                return JsonUtils.parseStringIntoItemStack(s);
+                return ItemUtil.parseStringIntoItemStack(s);
             }
 
             @Override
@@ -162,7 +161,7 @@ public class AchievementType extends JsonType
             displayItem = required;
         }
 
-        achievement = new Achievement(name, name, x, y, JsonUtils.parseStringIntoItemStack(displayItem), parentAchievement);
+        achievement = new Achievement(name, name, x, y, ItemUtil.parseStringIntoItemStack(displayItem), parentAchievement);
 
         if (parentAchievement == null)
         {

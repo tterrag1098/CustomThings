@@ -1,14 +1,16 @@
 package tterrag.customthings.common.handlers;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.ItemPickupEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
-import tterrag.core.common.Handlers.Handler;
 import tterrag.customthings.common.config.json.AchievementType;
 import tterrag.customthings.common.config.json.AchievementType.AchievementSource;
+
+import com.enderio.core.common.Handlers.Handler;
+
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
+import cpw.mods.fml.common.gameevent.PlayerEvent.ItemPickupEvent;
 
 @Handler
 public class AchievementHandler

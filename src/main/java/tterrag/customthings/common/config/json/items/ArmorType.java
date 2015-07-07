@@ -11,10 +11,12 @@ import net.minecraftforge.common.util.EnumHelper;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import tterrag.core.common.json.JsonUtils;
 import tterrag.customthings.CustomThings;
 import tterrag.customthings.common.config.json.IHasMaterial;
 import tterrag.customthings.common.item.ItemCustomArmor;
+
+import com.enderio.core.common.util.ItemUtil;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ArmorType extends ItemType implements IHasMaterial
@@ -74,7 +76,7 @@ public class ArmorType extends ItemType implements IHasMaterial
     @Override
     public void postInit()
     {
-        repairMat = material.equals("null") ? null : JsonUtils.parseStringIntoItemStack(material);
+        repairMat = material.equals("null") ? null : ItemUtil.parseStringIntoItemStack(material);
     }
 
     public String getUnlocName(int slot)

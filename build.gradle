@@ -20,7 +20,7 @@ minecraft {
     runDir = 'run'
 	
 	replace "@VERSION@", project.version
-    replace "${toReplace}", "required-after:ttCore@[${ttCore_version},)"
+    replace "${toReplace}", "required-after:endercore@[${endercore_version},)"
     replaceIn "CustomThings.java"
 }
 
@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-	compile "tterrag.core:ttCore:${ttCore_version}:deobf"
+	compile "com.enderio.core:EnderCore:${endercore_version}:dev"
     compile "org.projectlombok:lombok:1.16.4"
     compile "tterrag.difficultyrecipes:DifficultyRecipes:${dc_version}:deobf"
     compile "codechicken:NotEnoughItems:1.7.10-1.0.3.57:dev"

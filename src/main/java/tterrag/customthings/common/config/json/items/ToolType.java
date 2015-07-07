@@ -12,7 +12,6 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import org.apache.commons.lang3.StringUtils;
 
-import tterrag.core.common.json.JsonUtils;
 import tterrag.customthings.CustomThings;
 import tterrag.customthings.common.config.json.IHasMaterial;
 import tterrag.customthings.common.item.ICustomRepair;
@@ -21,6 +20,9 @@ import tterrag.customthings.common.item.ItemCustomHoe;
 import tterrag.customthings.common.item.ItemCustomPickaxe;
 import tterrag.customthings.common.item.ItemCustomShovel;
 import tterrag.customthings.common.item.ItemCustomSword;
+
+import com.enderio.core.common.util.ItemUtil;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ToolType extends ItemType implements IHasMaterial
@@ -121,7 +123,7 @@ public class ToolType extends ItemType implements IHasMaterial
     @Override
     public void postInit()
     {
-        repairMat = material.equals("null") ? null : JsonUtils.parseStringIntoItemStack(material);
+        repairMat = material.equals("null") ? null : ItemUtil.parseStringIntoItemStack(material);
     }
 
     private Item instantiate(ToolClass clazz)

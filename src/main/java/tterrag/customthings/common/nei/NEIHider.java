@@ -7,12 +7,13 @@ import java.util.List;
 import java.util.Scanner;
 
 import net.minecraft.item.ItemStack;
-import tterrag.core.common.compat.ICompatability;
-import tterrag.core.common.json.JsonUtils;
 import tterrag.customthings.common.config.ConfigHandler;
 import codechicken.nei.api.API;
 
-public class NEIHider implements ICompatability
+import com.enderio.core.common.compat.ICompat;
+import com.enderio.core.common.util.ItemUtil;
+
+public class NEIHider implements ICompat
 {
     private static List<String> readStrings = new ArrayList<String>();
     public static void load()
@@ -39,7 +40,7 @@ public class NEIHider implements ICompatability
         
         for (String s : readStrings)
         {
-            ItemStack stack = (ItemStack) JsonUtils.parseStringIntoRecipeItem(s, true);
+            ItemStack stack = (ItemStack) ItemUtil.parseStringIntoRecipeItem(s, true);
             API.hideItem(stack);
         }
     }

@@ -6,14 +6,8 @@ import java.lang.reflect.Type;
 import java.util.EnumMap;
 import java.util.List;
 
-import net.minecraft.world.EnumDifficulty;
-
 import org.apache.commons.io.filefilter.FileFilterUtils;
 
-import tterrag.core.common.config.JsonConfigReader;
-import tterrag.core.common.config.JsonConfigReader.ModToken;
-import tterrag.core.common.util.ResourcePackAssembler;
-import tterrag.core.common.util.TTFileUtils;
 import tterrag.customthings.CustomThings;
 import tterrag.customthings.common.compat.CompatUtil;
 import tterrag.customthings.common.config.json.AchievementType;
@@ -30,6 +24,10 @@ import tterrag.customthings.common.config.json.items.RecordType;
 import tterrag.customthings.common.config.json.items.ToolType;
 import tterrag.difficultyrecipes.util.Difficulty;
 
+import com.enderio.core.common.config.JsonConfigReader;
+import com.enderio.core.common.config.JsonConfigReader.ModToken;
+import com.enderio.core.common.util.EnderFileUtils;
+import com.enderio.core.common.util.ResourcePackAssembler;
 import com.google.common.collect.Lists;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -120,7 +118,7 @@ public class ConfigHandler
     private static void addIcons(ResourcePackAssembler assembler)
     {
         initialize("icons");
-        for (File f : new File(baseDir.getAbsolutePath() + "/icons").listFiles(TTFileUtils.pngFilter))
+        for (File f : new File(baseDir.getAbsolutePath() + "/icons").listFiles(EnderFileUtils.pngFilter))
         {
             assembler.addIcon(f);
         }
@@ -129,7 +127,7 @@ public class ConfigHandler
     private static void addLangs(ResourcePackAssembler assembler)
     {
         initialize("lang");
-        for (File f : new File(baseDir.getAbsolutePath() + "/lang").listFiles(TTFileUtils.langFilter))
+        for (File f : new File(baseDir.getAbsolutePath() + "/lang").listFiles(EnderFileUtils.langFilter))
         {
             assembler.addLang(f);
         }
@@ -152,7 +150,7 @@ public class ConfigHandler
             event.add("sounds", sounds);
             root.add("records." + CustomThings.MODID + "." + getSimpleName(f), event); // event name (same as name sent to ItemCustomRecord)
         }
-        assembler.addCustomFile("assets/minecraft", TTFileUtils.writeToFile(baseDir.getAbsolutePath() + "/recordMusic/sounds.json", gson.toJson(root)));
+        assembler.addCustomFile("assets/minecraft", EnderFileUtils.writeToFile(baseDir.getAbsolutePath() + "/recordMusic/sounds.json", gson.toJson(root)));
     }
 
     private static String getSimpleName(File file)
