@@ -30,4 +30,10 @@ public class ItemBlockCustom extends ItemBlockWithMetadata implements ICustomIte
     {
         return ((IBlockCustom) this.field_150939_a).getType(stack);
     }
+    
+    @Override
+    public int getItemStackLimit(ItemStack stack)
+    {
+        return getType(stack).maxStackSize;
+    }
 }

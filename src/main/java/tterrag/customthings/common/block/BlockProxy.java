@@ -158,8 +158,14 @@ public class BlockProxy<T extends Block & IBlockCustom> implements IBlockCustom
         BlockType type = types[metadata];
         return type == null ? 0 : rand.nextInt(type.maxXp - type.minXp + 1) + type.minXp;
     }
+    
+    public int getLightValue(IBlockAccess world, int x, int y, int z)
+    {
+        BlockType type = getType(world, x, y, z);
+        return type.lightLevel;
+    }
 
-    private BlockType getType(World world, int x, int y, int z)
+    private BlockType getType(IBlockAccess world, int x, int y, int z)
     {
         int meta = world.getBlockMetadata(x, y, z);
         return block.getType(meta);

@@ -118,6 +118,8 @@ public class BlockType extends JsonType
     public String[] oreDictNames    = null;
     public boolean  isOpaque        = true;
     public String   shape           = "normal";
+    public int      lightLevel      = 0;
+    public int      maxStackSize    = 64;
     /* End JSON Fields @formatter:on */
 
     private transient DropData[] stackDrops;
