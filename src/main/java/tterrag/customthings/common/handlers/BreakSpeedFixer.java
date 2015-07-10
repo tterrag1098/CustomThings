@@ -3,7 +3,7 @@ package tterrag.customthings.common.handlers;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
-import tterrag.customthings.common.block.BlockCustom;
+import tterrag.customthings.common.block.IBlockCustom;
 import tterrag.customthings.common.config.json.BlockType;
 
 import com.enderio.core.common.Handlers.Handler;
@@ -17,9 +17,9 @@ public class BreakSpeedFixer
     @SubscribeEvent
     public void onBreakSpeed(BreakSpeed event)
     {
-        if (event.block instanceof BlockCustom)
+        if (event.block instanceof IBlockCustom)
         {
-            BlockType type = ((BlockCustom) event.block).getType(event.metadata);
+            BlockType type = ((IBlockCustom) event.block).getType(event.metadata);
             if (type.toolType.isEmpty())
             {
                 return;
