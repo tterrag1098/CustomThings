@@ -5,4 +5,4 @@ Adding custom items (and soon blocks) to minecraft via JSON files.
 
 You can read documentation at [**the wiki**](https://github.com/tterrag1098/CustomThings/wiki)
 
-This mod *requires* [ttCore](http://ci.tterrag.com/job/ttCore/)
+This mod *requires* [EnderCore](http://curse.com/project/231868)
