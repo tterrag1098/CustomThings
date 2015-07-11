@@ -6,7 +6,6 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import lombok.experimental.Delegate;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import tterrag.customthings.common.config.json.BlockType.BlockData;
 import tterrag.customthings.common.config.json.BlockType;
@@ -62,9 +61,6 @@ public class BlockCustomSlab extends BlockSlab implements IBlockCustom
         setStepSound(slab.getData().getType().sound);
     }
     
-    @Override
-    public boolean isBlockSolid(IBlockAccess p_149747_1_, int p_149747_2_, int p_149747_3_, int p_149747_4_, int p_149747_5_) { return false; }
-
     @Override
     public String func_150002_b(int p_150002_1_)
     {

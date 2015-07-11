@@ -23,7 +23,6 @@ public class ItemType extends JsonType
     /* JSON Fields @formatter:off */
     public String   container       = null;
     public String[] oreDictNames    = null;
-    public String   flavorText      = null;
     public int      maxStackSize    = 64;
     public int      burnTime        = 0;
     /* End JSON Fields @formatter:on */
