@@ -97,7 +97,7 @@ public class BlockProxy<T extends Block & IBlockCustom> implements IBlockCustom
 
     public boolean isOpaqueCube()
     {
-        return block == null ? true : block.getData().isOpaque();
+        return block == null ? true : getData().isOpaque();
     }
 
     public boolean isToolEffective(String tool, int metadata)
@@ -109,12 +109,12 @@ public class BlockProxy<T extends Block & IBlockCustom> implements IBlockCustom
     public String getHarvestTool(int metadata)
     {
         BlockType type = getType(metadata);
-        return type.toolType.isEmpty() ? block.getHarvestTool(metadata) : type.toolType;
+        return type.toolType.isEmpty() ? null : type.toolType;
     }
 
     public boolean canHarvestBlock(EntityPlayer player, int meta)
     {
-        BlockType type = block.getType(meta);
+        BlockType type = getType(meta);
         ItemStack held = player.getHeldItem();
         int harvestLevel = getHarvestLevel(meta);
         if (type.toolType.isEmpty() || held == null)
@@ -127,7 +127,7 @@ public class BlockProxy<T extends Block & IBlockCustom> implements IBlockCustom
 
     public int getHarvestLevel(int metadata)
     {
-        return block.getType(metadata).harvestLevel;
+        return getType(metadata).harvestLevel;
     }
 
     public float getBlockHardness(World world, int x, int y, int z)
@@ -168,7 +168,7 @@ public class BlockProxy<T extends Block & IBlockCustom> implements IBlockCustom
     private BlockType getType(IBlockAccess world, int x, int y, int z)
     {
         int meta = world.getBlockMetadata(x, y, z);
-        return block.getType(meta);
+        return getType(meta);
     }
 
     @Override
