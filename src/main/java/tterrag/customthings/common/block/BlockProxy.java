@@ -127,7 +127,8 @@ public class BlockProxy<T extends Block & IBlockCustom> implements IBlockCustom
 
     public int getHarvestLevel(int metadata)
     {
-        return getType(metadata).harvestLevel;
+        BlockType type = getType(metadata);
+        return type == null ? 0 : type.harvestLevel;
     }
 
     public float getBlockHardness(World world, int x, int y, int z)
