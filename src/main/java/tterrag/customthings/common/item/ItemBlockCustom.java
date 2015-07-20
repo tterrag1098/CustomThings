@@ -18,8 +18,8 @@ public class ItemBlockCustom extends ItemBlockWithMetadata implements ICustomIte
     public String getUnlocalizedName(ItemStack stack)
     {
         BlockType type = getType(stack);
-        if (type == null) {
-            System.out.println(stack.getUnlocalizedName());
+        if (type == null)
+        {
             return "error";
         }
         return String.format("tile.%s.%s", CustomThings.MODID, type.name);
