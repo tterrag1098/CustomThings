@@ -13,6 +13,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.Block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraftforge.oredict.OreDictionary;
 
 import org.apache.commons.lang3.StringUtils;
@@ -120,6 +121,7 @@ public class BlockType extends JsonType
     public String   shape           = "normal";
     public int      lightLevel      = 0;
     public int      maxStackSize    = 64;
+    public int      burnTime        = 0;
     /* End JSON Fields @formatter:on */
 
     private transient DropData[] stackDrops;
@@ -132,6 +134,9 @@ public class BlockType extends JsonType
     public void register()
     {
         initData();
+        lightLevel = MathHelper.clamp_int(lightLevel, 0, 15);
+        maxStackSize = MathHelper.clamp_int(maxStackSize, 1, 64);
+        burnTime = Math.max(0, burnTime);
         blockTypes.get(data).add(this);
     }
 

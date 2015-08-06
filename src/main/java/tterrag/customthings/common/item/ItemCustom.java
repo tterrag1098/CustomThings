@@ -9,25 +9,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import tterrag.customthings.CustomThings;
 import tterrag.customthings.common.config.json.items.ItemType;
-import cpw.mods.fml.common.IFuelHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemCustom extends Item implements ICustomItem<ItemType>
 {
-    public static class FuelHandler implements IFuelHandler
-    {
-        @Override
-        public int getBurnTime(ItemStack fuel)
-        {
-            if (fuel.getItem() instanceof ItemCustom)
-            {
-                return ((ItemCustom) fuel.getItem()).getType(fuel).burnTime;
-            }
-            return 0;
-        }
-    }
-
     @SideOnly(Side.CLIENT)
     private IIcon[] icons;
 

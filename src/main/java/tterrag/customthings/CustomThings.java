@@ -4,7 +4,7 @@ import net.minecraftforge.client.ClientCommandHandler;
 import tterrag.customthings.common.command.CommandCustomThings;
 import tterrag.customthings.common.config.ConfigHandler;
 import tterrag.customthings.common.config.json.items.ItemType;
-import tterrag.customthings.common.item.ItemCustom;
+import tterrag.customthings.common.handlers.FuelHandler;
 
 import com.enderio.core.IEnderMod;
 import com.enderio.core.common.compat.CompatRegistry;
@@ -18,6 +18,7 @@ import cpw.mods.fml.common.event.FMLMissingMappingsEvent.MissingMapping;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
+
 import static tterrag.customthings.CustomThings.*;
 
 @Mod(modid = MODID, name = NAME, version = VERSION, dependencies = DEPENDENCIES)
@@ -43,7 +44,7 @@ public class CustomThings implements IEnderMod
     public void init(FMLInitializationEvent event)
     {
         ConfigHandler.init();
-        GameRegistry.registerFuelHandler(new ItemCustom.FuelHandler());
+        GameRegistry.registerFuelHandler(new FuelHandler());
     }
 
     @EventHandler

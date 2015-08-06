@@ -109,7 +109,7 @@ public class BlockProxy<T extends Block & IBlockCustom> implements IBlockCustom
     public String getHarvestTool(int metadata)
     {
         BlockType type = getType(metadata);
-        return type.toolType.isEmpty() ? null : type.toolType;
+        return type == null || type.toolType.isEmpty() ? null : type.toolType;
     }
 
     public boolean canHarvestBlock(EntityPlayer player, int meta)
