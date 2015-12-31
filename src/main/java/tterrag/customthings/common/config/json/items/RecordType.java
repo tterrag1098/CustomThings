@@ -25,6 +25,7 @@ public class RecordType extends ItemType
     @Override
     public void register()
     {
+        super.register();
         item = new ItemCustomRecord(name);
         GameRegistry.registerItem(item, name);
         types.add(this);

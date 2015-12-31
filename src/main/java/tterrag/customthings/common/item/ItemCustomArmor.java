@@ -1,6 +1,7 @@
 package tterrag.customthings.common.item;
 
 import lombok.Getter;
+import lombok.experimental.Delegate;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,6 +17,10 @@ public class ItemCustomArmor extends ItemArmor implements ISpecialArmor, ICustom
     private String textureName;
     @Getter
     private ArmorType type;
+    
+    @Delegate
+    private final ItemProxy<ArmorType, ItemCustomArmor> proxy = new ItemProxy<ArmorType, ItemCustomArmor>(this);
+    
     public ItemCustomArmor(ArmorType type, int slot)
     {
         super(type.getMaterial(), 0, slot);

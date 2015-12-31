@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
@@ -25,10 +26,14 @@ public class ItemType extends JsonType
     public String[] oreDictNames    = null;
     public int      maxStackSize    = 64;
     public int      burnTime        = 0;
+    public String   rarity          = EnumRarity.common.name();
     /* End JSON Fields @formatter:on */
 
     @Getter
     private transient ItemStack containerItem = null;
+    
+    @Getter
+    private transient EnumRarity enumRarity = null;
 
     private static Item item;
 
@@ -50,14 +55,17 @@ public class ItemType extends JsonType
     {
         maxStackSize = MathHelper.clamp_int(maxStackSize, 1, 64);
         burnTime = Math.max(0, burnTime);
-        
-        if (getItem() == null)
-        {
-            item = new ItemCustom();
-            GameRegistry.registerItem(getItem(), "item");
-        }
+        enumRarity = EnumRarity.valueOf(rarity);
 
-        types.add(this);
+        if (getClass() == ItemType.class)
+        {
+            if (getItem() == null)
+            {
+                item = new ItemCustom();
+                GameRegistry.registerItem(getItem(), "item");
+            }
+            types.add(this);
+        }
 
         ItemStack stack = getStack();
         OreDictionary.registerOre("item" + StringUtils.capitalize(name), stack);

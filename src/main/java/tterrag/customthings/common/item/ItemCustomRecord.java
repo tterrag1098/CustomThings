@@ -1,5 +1,6 @@
 package tterrag.customthings.common.item;
 
+import lombok.experimental.Delegate;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemRecord;
 import net.minecraft.item.ItemStack;
@@ -10,7 +11,10 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemCustomRecord extends ItemRecord implements ICustomItem<RecordType>
-{   
+{
+    @Delegate
+    private final ItemProxy<RecordType, ItemCustomRecord> proxy = new ItemProxy<RecordType, ItemCustomRecord>(this);
+    
     public ItemCustomRecord(String name)
     {
         super(CustomThings.MODID + "." + name);

@@ -83,6 +83,7 @@ public class ToolType extends ItemType implements IHasMaterial
     @Override
     public void register()
     {
+        super.register();
         EnumHelper.addToolMaterial(name, level, durability, efficiency, damage, enchantability);
 
         for (ToolClass clazz : getToolClasses())

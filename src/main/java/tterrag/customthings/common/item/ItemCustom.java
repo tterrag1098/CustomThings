@@ -2,6 +2,7 @@ package tterrag.customthings.common.item;
 
 import java.util.List;
 
+import lombok.experimental.Delegate;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
@@ -16,6 +17,9 @@ public class ItemCustom extends Item implements ICustomItem<ItemType>
 {
     @SideOnly(Side.CLIENT)
     private IIcon[] icons;
+    
+    @Delegate
+    private final ItemProxy<ItemType, ItemCustom> proxy = new ItemProxy<ItemType, ItemCustom>(this);
 
     public ItemCustom()
     {
@@ -48,12 +52,6 @@ public class ItemCustom extends Item implements ICustomItem<ItemType>
     }
 
     @Override
-    public int getItemStackLimit(ItemStack stack)
-    {
-        return getType(stack).maxStackSize;
-    }
-
-    @Override
     public String getUnlocalizedName(ItemStack stack)
     {
         return getType(stack).getUnlocName();
@@ -69,23 +67,6 @@ public class ItemCustom extends Item implements ICustomItem<ItemType>
     public IIcon getIconFromDamage(int damage)
     {
         return damage < icons.length ? icons[damage] : null;
-    }
-
-    @Override
-    public boolean hasContainerItem(ItemStack stack)
-    {
-        return getType(stack).getContainerItem() != null;
-    }
-
-    @Override
-    public ItemStack getContainerItem(ItemStack stack)
-    {
-        ItemStack container = getType(stack).getContainerItem();
-        if (container != null)
-        {
-            return container.copy();
-        }
-        return null;
     }
 
     @Override

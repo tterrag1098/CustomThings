@@ -1,5 +1,6 @@
 package tterrag.customthings.common.item;
 
+import lombok.experimental.Delegate;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
@@ -14,7 +15,10 @@ import tterrag.customthings.common.config.json.items.ToolType.ToolClass;
 public class ItemCustomPickaxe extends ItemPickaxe implements ICustomRepair<ToolType>
 {
     private ToolType type;
-
+    
+    @Delegate
+    private final ItemProxy<ToolType, ItemCustomPickaxe> proxy = new ItemProxy<ToolType, ItemCustomPickaxe>(this);
+    
     public ItemCustomPickaxe(ToolType type)
     {
         super(type.getToolMaterial());

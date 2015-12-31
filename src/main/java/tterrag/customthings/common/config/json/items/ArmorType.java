@@ -59,6 +59,7 @@ public class ArmorType extends ItemType implements IHasMaterial
     @Override
     public void register()
     {
+        super.register();
         EnumHelper.addArmorMaterial(getMaterialName(), 0, protectionDisplays, enchantability); // dummy, used for enchantability
         items = new Item[4];
         for (int i = 0; i <= 3; i++)

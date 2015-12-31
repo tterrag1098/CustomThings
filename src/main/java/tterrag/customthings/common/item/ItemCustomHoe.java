@@ -1,5 +1,6 @@
 package tterrag.customthings.common.item;
 
+import lombok.experimental.Delegate;
 import net.minecraft.item.ItemHoe;
 import net.minecraft.item.ItemStack;
 import tterrag.customthings.common.config.json.items.ToolType;
@@ -9,6 +10,9 @@ public class ItemCustomHoe extends ItemHoe implements ICustomRepair<ToolType>
 {
     private ToolType type;
     
+    @Delegate
+    private final ItemProxy<ToolType, ItemCustomHoe> proxy = new ItemProxy<ToolType, ItemCustomHoe>(this);
+
     public ItemCustomHoe(ToolType type)
     {
         super(type.getToolMaterial());

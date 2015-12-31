@@ -1,5 +1,6 @@
 package tterrag.customthings.common.item;
 
+import lombok.experimental.Delegate;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import tterrag.customthings.common.config.json.items.ToolType;
@@ -8,6 +9,9 @@ import tterrag.customthings.common.config.json.items.ToolType.ToolClass;
 public class ItemCustomSword extends ItemSword implements ICustomRepair<ToolType>
 {
     private ToolType type;
+    
+    @Delegate
+    private final ItemProxy<ToolType, ItemCustomSword> proxy = new ItemProxy<ToolType, ItemCustomSword>(this);
     
     public ItemCustomSword(ToolType type)
     {
