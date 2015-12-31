@@ -45,4 +45,9 @@ public class ItemProxy<J extends ItemType, T extends Item & ICustomItem<J>>
     {
         return getType(stack).getEnumRarity();
     }
+    
+    public boolean hasEffect(ItemStack stack, int pass)
+    {
+        return getType(stack).enchanted;
+    }
 }

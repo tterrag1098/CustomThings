@@ -27,6 +27,7 @@ public class ItemType extends JsonType
     public int      maxStackSize    = 64;
     public int      burnTime        = 0;
     public String   rarity          = EnumRarity.common.name();
+    public boolean  enchanted       = false;
     /* End JSON Fields @formatter:on */
 
     @Getter
