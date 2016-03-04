@@ -20,8 +20,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import tterrag.customthings.common.block.BlockCustom;
 import tterrag.customthings.common.block.BlockCustomFalling;
+import tterrag.customthings.common.block.BlockCustomFence;
 import tterrag.customthings.common.block.BlockCustomSlab;
 import tterrag.customthings.common.block.BlockCustomStairs;
+import tterrag.customthings.common.block.BlockCustomWall;
 import tterrag.customthings.common.block.IBlockCustom;
 import tterrag.customthings.common.item.ItemBlockCustom;
 import tterrag.customthings.common.item.ItemBlockCustomSlab;
@@ -67,7 +69,10 @@ public class BlockType extends JsonType
             }
         },
         STAIR(BlockCustomStairs.class),
-        FALLING(BlockCustomFalling.class);
+        FALLING(BlockCustomFalling.class),
+        FENCE(BlockCustomFence.class),
+        WALL(BlockCustomWall.class),
+        ;
 
         public final Class<? extends IBlockCustom> clazz;
         

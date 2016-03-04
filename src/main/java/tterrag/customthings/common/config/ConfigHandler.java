@@ -59,7 +59,7 @@ public class ConfigHandler
     private static JsonConfigReader<ItemType> itemReader;
     private static JsonConfigReader<RecordType> recordReader;
     private static JsonConfigReader<BlockType> blockReader;
-    private static JsonConfigReader<FluidType> fluidReader;
+//    private static JsonConfigReader<FluidType> fluidReader;
     
     private static JsonConfigReader<ShapedJsonRecipe> shapedReader;
     private static JsonConfigReader<ShapelessJsonRecipe> shapelessReader;
@@ -83,7 +83,7 @@ public class ConfigHandler
         itemReader = new JsonConfigReader<ItemType>(token, baseDir.getAbsolutePath() + "/" + "customItems.json", ItemType.class);
         recordReader = new JsonConfigReader<RecordType>(token, baseDir.getAbsolutePath() + "/" + "customRecords.json", RecordType.class);
         blockReader = new JsonConfigReader<BlockType>(token, baseDir.getAbsolutePath() + "/" + "customBlocks.json", BlockType.class);
-        fluidReader = new JsonConfigReader<FluidType>(token, baseDir.getAbsolutePath() + "/" + "customFluids.json", FluidType.class);
+//        fluidReader = new JsonConfigReader<FluidType>(token, baseDir.getAbsolutePath() + "/" + "customFluids.json", FluidType.class);
         
         shapedReader = new JsonConfigReader<ShapedJsonRecipe>(token, baseDir.getAbsolutePath() + "/" + "shapedRecipes.json", ShapedJsonRecipe.class);
         shapelessReader = new JsonConfigReader<ShapelessJsonRecipe>(token, baseDir.getAbsolutePath() + "/" + "shapelessRecipes.json", ShapelessJsonRecipe.class);
@@ -180,7 +180,7 @@ public class ConfigHandler
         addAll(itemReader.getElements());
         addAll(recordReader.getElements());
         addAll(blockReader.getElements());
-        addAll(fluidReader.getElements());
+//        addAll(fluidReader.getElements());
         
         BlockType.registerBlocks();
     }
