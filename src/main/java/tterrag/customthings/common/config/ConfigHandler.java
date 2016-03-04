@@ -12,7 +12,6 @@ import tterrag.customthings.CustomThings;
 import tterrag.customthings.common.compat.CompatUtil;
 import tterrag.customthings.common.config.json.AchievementType;
 import tterrag.customthings.common.config.json.BlockType;
-import tterrag.customthings.common.config.json.FluidType;
 import tterrag.customthings.common.config.json.IJsonType;
 import tterrag.customthings.common.config.json.crafting.ShapedJsonRecipe;
 import tterrag.customthings.common.config.json.crafting.ShapelessJsonRecipe;
