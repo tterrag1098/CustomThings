@@ -23,16 +23,7 @@ public class AchievementHandler
             return;
         }
 
-        for (AchievementType type : AchievementType.achievements)
-        {
-            if (type.achievementSource == AchievementSource.BLOCK_BREAK)
-            {
-                if (type.achievementSource.matchesObject(type.sourceObj, event.block, event.blockMetadata))
-                {
-                    event.getPlayer().addStat(type.achievement, 1);
-                }
-            }
-        }
+        triggerAchievement(AchievementSource.BLOCK_BREAK, event.getPlayer(), event.block, event.blockMetadata);
     }
 
     @SubscribeEvent
@@ -43,16 +34,7 @@ public class AchievementHandler
             return;
         }
 
-        for (AchievementType type : AchievementType.achievements)
-        {
-            if (type.achievementSource == AchievementSource.ENTITY_KILL)
-            {
-                if (type.achievementSource.matchesObject(type.sourceObj, event.entityLiving))
-                {
-                    ((EntityPlayer) event.source.getSourceOfDamage()).addStat(type.achievement, 1);
-                }
-            }
-        }
+        triggerAchievement(AchievementSource.ENTITY_KILL, (EntityPlayer) event.source.getSourceOfDamage(), event.entityLiving);
     }
 
     @SubscribeEvent
@@ -63,16 +45,7 @@ public class AchievementHandler
             return;
         }
 
-        for (AchievementType type : AchievementType.achievements)
-        {
-            if (type.achievementSource == AchievementSource.ITEM_PICKUP)
-            {
-                if (type.achievementSource.matchesObject(type.sourceObj, event.pickedUp.getEntityItem()))
-                {
-                    event.player.addStat(type.achievement, 1);
-                }
-            }
-        }
+        triggerAchievement(AchievementSource.ITEM_PICKUP, event.player, event.pickedUp.getEntityItem());
     }
 
     @SubscribeEvent
@@ -83,14 +56,16 @@ public class AchievementHandler
             return;
         }
 
-        for (AchievementType type : AchievementType.achievements)
+        triggerAchievement(AchievementSource.CRAFTING, event.player, event.crafting);
+    }
+
+    private static void triggerAchievement(AchievementSource source, EntityPlayer player, Object... in)
+    {
+        for (AchievementType type : AchievementType.lookup.get(source))
         {
-            if (type.achievementSource == AchievementSource.CRAFTING)
+            if (source.matchesObject(type.sourceObj, in))
             {
-                if (type.achievementSource.matchesObject(type.sourceObj, event.crafting))
-                {
-                    event.player.addStat(type.achievement, 1);
-                }
+                player.addStat(type.achievement, 1);
             }
         }
     }

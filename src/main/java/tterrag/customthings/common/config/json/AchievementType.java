@@ -13,7 +13,9 @@ import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.oredict.OreDictionary;
 
 import com.enderio.core.common.util.ItemUtil;
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Multimap;
 
 public class AchievementType extends JsonType
 {
@@ -140,6 +142,7 @@ public class AchievementType extends JsonType
     public transient Object sourceObj;
 
     public static final List<AchievementType> achievements = Lists.newArrayList();
+    public static final Multimap<AchievementSource, AchievementType> lookup = HashMultimap.create();
 
     @SuppressWarnings("unchecked")
     @Override
@@ -198,5 +201,6 @@ public class AchievementType extends JsonType
         sourceObj = achievementSource.getObjectFromString(required);
         
         achievements.add(this);
+        lookup.put(achievementSource, this);
     }
 }
