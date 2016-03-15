@@ -60,6 +60,6 @@ public class ItemCustomRecord extends ItemRecord implements ICustomItem<RecordTy
     @Override
     public RecordType getType(ItemStack stack)
     {
-        return RecordType.getType(stack.getItemDamage() % RecordType.getTypes().size());
+        return RecordType.getType(stack.getItemDamage() % RecordType.types.size());
     }
 }

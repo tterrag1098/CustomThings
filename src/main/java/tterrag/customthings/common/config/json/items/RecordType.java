@@ -34,7 +34,7 @@ public class RecordType extends ItemType
         addOreDictNames(new ItemStack(item));
     }
 
-    private static final List<RecordType> types = new ArrayList<RecordType>();
+    public static final List<RecordType> types = new ArrayList<RecordType>();
     
     public static int getColor(Item item)
     {

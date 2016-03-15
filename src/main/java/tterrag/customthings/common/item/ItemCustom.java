@@ -32,7 +32,7 @@ public class ItemCustom extends Item implements ICustomItem<ItemType>
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister register)
     {
-        List<ItemType> types = ItemType.getTypes();
+        List<ItemType> types = ItemType.types;
         icons = new IIcon[types.size()];
         for (int i = 0; i < types.size(); i++)
         {
@@ -44,7 +44,7 @@ public class ItemCustom extends Item implements ICustomItem<ItemType>
     @Override
     public void getSubItems(Item item, CreativeTabs tab, List list)
     {
-        List<ItemType> types = ItemType.getTypes();
+        List<ItemType> types = ItemType.types;
         for (int i = 0; i < types.size(); i++)
         {
             list.add(new ItemStack(item, 1, i));
@@ -72,6 +72,6 @@ public class ItemCustom extends Item implements ICustomItem<ItemType>
     @Override
     public ItemType getType(ItemStack stack)
     {
-        return ItemType.getType(stack.getItemDamage() % ItemType.getTypes().size());
+        return ItemType.getType(stack.getItemDamage() % ItemType.types.size());
     }
 }
