@@ -25,8 +25,11 @@ public class RecordType extends ItemType
     @Override
     public void register()
     {
+    	// Max stack size must be 1 or we get a dupe bug, so ignore json value
+    	maxStackSize = 1;
+    	
         super.register();
-        item = new ItemCustomRecord(name);
+        item = new ItemCustomRecord(this);
         GameRegistry.registerItem(item, name);
         types.add(this);
         OreDictionary.registerOre("record", item);
