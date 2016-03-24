@@ -1,6 +1,9 @@
 package tterrag.customthings.common.handlers;
 
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.stats.StatisticsFile;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import tterrag.customthings.common.config.json.AchievementType;
@@ -65,6 +68,18 @@ public class AchievementHandler
         {
             if (source.matchesObject(type.sourceObj, in))
             {
+                if (type.rewardStack != null)
+                {
+                    StatisticsFile file = ((EntityPlayerMP) player).func_147099_x();
+                    if (!file.hasAchievementUnlocked(type.achievement) && file.canUnlockAchievement(type.achievement))
+                    {
+                        if (!player.inventory.addItemStackToInventory(type.rewardStack.copy()))
+                        {
+                            player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, player.posX, player.posY, player.posZ,
+                                    type.rewardStack.copy()));
+                        }
+                    }
+                }
                 player.addStat(type.achievement, 1);
             }
         }

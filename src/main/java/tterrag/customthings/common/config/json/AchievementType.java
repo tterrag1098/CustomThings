@@ -132,6 +132,7 @@ public class AchievementType extends JsonType
     public String source = "CRAFTING";
     public String required = "minecraft:stone";
     public String displayItem = null; // null means show required item
+    public String reward = null;
     public boolean isSpecial = false;
     /* End JSON Fields @formatter:on */
 
@@ -140,6 +141,8 @@ public class AchievementType extends JsonType
     public transient Achievement achievement;
     public transient AchievementSource achievementSource;
     public transient Object sourceObj;
+    
+    public transient ItemStack rewardStack;
 
     public static final List<AchievementType> achievements = Lists.newArrayList();
     public static final Multimap<AchievementSource, AchievementType> lookup = HashMultimap.create();
@@ -202,5 +205,14 @@ public class AchievementType extends JsonType
         
         achievements.add(this);
         lookup.put(achievementSource, this);
+    }
+
+    @Override
+    public void postInit()
+    {
+        if (reward != null)
+        {
+            rewardStack = ItemUtil.parseStringIntoItemStack(reward);
+        }
     }
 }
