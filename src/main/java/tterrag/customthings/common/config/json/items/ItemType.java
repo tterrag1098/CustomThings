@@ -49,7 +49,7 @@ public class ItemType extends JsonType
         dummy.name = "broken";
     }
 
-    private static final List<ItemType> types = new ArrayList<ItemType>();
+    public static final List<ItemType> types = new ArrayList<ItemType>();
 
     @Override
     public void register()
@@ -101,11 +101,6 @@ public class ItemType extends JsonType
     public static ItemType getType(int damage)
     {
         return damage >= types.size() ? dummy : types.get(damage);
-    }
-
-    public static List<ItemType> getTypes()
-    {
-        return types;
     }
 
     public static Item getItem()

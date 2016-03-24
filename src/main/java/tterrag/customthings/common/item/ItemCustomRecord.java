@@ -15,10 +15,14 @@ public class ItemCustomRecord extends ItemRecord implements ICustomItem<RecordTy
     @Delegate
     private final ItemProxy<RecordType, ItemCustomRecord> proxy = new ItemProxy<RecordType, ItemCustomRecord>(this);
     
-    public ItemCustomRecord(String name)
+    private RecordType type;
+    
+    public ItemCustomRecord(RecordType recordType)
     {
-        super(CustomThings.MODID + "." + name);
-        setUnlocalizedName(CustomThings.MODID + ".record." + name);
+        super(CustomThings.MODID + "." + recordType.name);
+    	this.type = recordType;
+
+        setUnlocalizedName(CustomThings.MODID + ".record." + recordType.name);
     }
     
     @SideOnly(Side.CLIENT)
@@ -60,6 +64,6 @@ public class ItemCustomRecord extends ItemRecord implements ICustomItem<RecordTy
     @Override
     public RecordType getType(ItemStack stack)
     {
-        return RecordType.getType(stack.getItemDamage() % RecordType.getTypes().size());
+        return type;
     }
 }
