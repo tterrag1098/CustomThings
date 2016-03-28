@@ -2,9 +2,11 @@ package tterrag.customthings.common.config.json;
 
 import java.util.List;
 
+import lombok.Value;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
@@ -123,6 +125,35 @@ public class AchievementType extends JsonType
 
         public abstract boolean matchesObject(Object test, Object... in);
     }
+    
+    @Value
+    public static class AchievementData {
+        long time = System.currentTimeMillis();
+        Achievement ach;
+        EntityPlayer player;
+    }
+    
+    public enum Template {
+        TIMESTAMP,
+        ACHIEVEMENT_ID,
+        ACHIEVEMENT_NAME,
+        USER_NAME,
+        USER_UUID,
+        ;
+        
+        public String template() {
+            return "%" + name() + "%";
+        }
+        
+        public static String format(String s, AchievementData data) {
+            return s.replace(TIMESTAMP.template(), Long.toString(data.time) + "L")
+                    .replace(ACHIEVEMENT_ID.template(), data.ach.statId)
+                    .replace(ACHIEVEMENT_NAME.template(), "achievement." + data.ach.statId)
+                    .replace(USER_NAME.template(), data.player.getCommandSenderName())
+                    .replace(USER_UUID.template(), data.player.getGameProfile().getId().toString())
+                    ;
+        }
+    }
 
     /* JSON Fields @formatter:off */
     public int x = 0;
@@ -133,6 +164,7 @@ public class AchievementType extends JsonType
     public String required = "minecraft:stone";
     public String displayItem = null; // null means show required item
     public String reward = null;
+    public String rewardNBT = null;
     public boolean isSpecial = false;
     /* End JSON Fields @formatter:on */
 
