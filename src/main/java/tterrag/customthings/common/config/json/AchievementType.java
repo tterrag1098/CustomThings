@@ -139,7 +139,7 @@ public class AchievementType extends JsonType
                     StatisticsFile file = ((EntityPlayerMP) in[1]).func_147099_x();
                     for (Achievement a : page.getAchievements())
                     {
-                        if (!file.hasAchievementUnlocked(a) && a != in[2] && !(a instanceof Ach) && (((Ach)a).parent.achievementSource != this || !((Ach)a).parent.required.equals(page.getName())))
+                        if (!file.hasAchievementUnlocked(a) && a != in[2] && (!(a instanceof Ach) || (((Ach)a).parent.achievementSource != this || !((Ach)a).parent.required.equals(page.getName()))))
                         {
                             return false;
                         }
