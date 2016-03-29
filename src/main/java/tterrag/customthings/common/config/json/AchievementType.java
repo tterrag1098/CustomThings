@@ -139,7 +139,7 @@ public class AchievementType extends JsonType
                     StatisticsFile file = ((EntityPlayerMP) in[1]).func_147099_x();
                     for (Achievement a : page.getAchievements())
                     {
-                        if (!file.hasAchievementUnlocked(a) && a != in[2])
+                        if (!file.hasAchievementUnlocked(a) && a != in[2] && !(a instanceof Ach) && (((Ach)a).parent.achievementSource != this || !((Ach)a).parent.required.equals(page.getName())))
                         {
                             return false;
                         }
@@ -181,6 +181,17 @@ public class AchievementType extends JsonType
                     .replace(USER_NAME.template(), data.player.getCommandSenderName())
                     .replace(USER_UUID.template(), data.player.getGameProfile().getId().toString())
                     ;
+        }
+    }
+    
+    private class Ach extends Achievement 
+    {
+        private AchievementType parent;
+        
+        public Ach(String p_i45302_1_, String p_i45302_2_, int p_i45302_3_, int p_i45302_4_, ItemStack p_i45302_5_, Achievement p_i45302_6_)
+        {
+            super(p_i45302_1_, p_i45302_2_, p_i45302_3_, p_i45302_4_, p_i45302_5_, p_i45302_6_);
+            parent = AchievementType.this;
         }
     }
 
@@ -228,7 +239,7 @@ public class AchievementType extends JsonType
             displayItem = required;
         }
 
-        achievement = new Achievement(name, name, x, y, ItemUtil.parseStringIntoItemStack(displayItem), parentAchievement);
+        achievement = new Ach(name, name, x, y, ItemUtil.parseStringIntoItemStack(displayItem), parentAchievement);
 
         if (parentAchievement == null)
         {
