@@ -7,10 +7,12 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
+import net.minecraft.stats.StatisticsFile;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -116,6 +118,33 @@ public class AchievementType extends JsonType
                         return entityName.toLowerCase().contains(((String) test).toLowerCase());
                     }
                     return in[0].getClass().getName().toLowerCase().contains(((String) test).toLowerCase());
+                }
+                return false;
+            }
+        },
+        ACHIEVEMENT_PAGE
+        {
+            @Override
+            protected Object getObjectFromString(String s)
+            {
+                return AchievementPage.getAchievementPage(s);
+            }
+            
+            @Override
+            public boolean matchesObject(Object test, Object... in)
+            {
+                if (in[0] == test && in[1] instanceof EntityPlayerMP)
+                {
+                    AchievementPage page = (AchievementPage) test;
+                    StatisticsFile file = ((EntityPlayerMP) in[1]).func_147099_x();
+                    for (Achievement a : page.getAchievements())
+                    {
+                        if (!file.hasAchievementUnlocked(a) && a != in[2])
+                        {
+                            return false;
+                        }
+                    }
+                    return true;
                 }
                 return false;
             }

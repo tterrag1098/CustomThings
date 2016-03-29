@@ -5,12 +5,15 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatisticsFile;
+import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.AchievementEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import tterrag.customthings.common.config.json.AchievementType;
 import tterrag.customthings.common.config.json.AchievementType.AchievementData;
 import tterrag.customthings.common.config.json.AchievementType.AchievementSource;
 
+import com.enderio.core.EnderCore;
 import com.enderio.core.common.Handlers.Handler;
 import com.enderio.core.common.util.ItemUtil;
 
@@ -46,6 +49,38 @@ public class AchievementHandler
     public void onItemCrafted(ItemCraftedEvent event)
     {
         triggerAchievement(AchievementSource.CRAFTING, event.player, event.crafting);
+    }
+    
+    private static boolean ignoreAchievement = false;
+    
+    @SubscribeEvent
+    public void onAchievement(final AchievementEvent event)
+    {
+        if (ignoreAchievement || event.entityPlayer.worldObj.isRemote || ((EntityPlayerMP)event.entityPlayer).func_147099_x().hasAchievementUnlocked(event.achievement))
+        {
+            return;
+        }
+        
+        AchievementPage page = null;
+        for (AchievementPage p : AchievementPage.getAchievementPages())
+        {
+            if (p.getAchievements().contains(event.achievement))
+            {
+                page = p;
+            }
+        }
+       
+        final AchievementPage pf = page;
+        EnderCore.proxy.getScheduler().schedule(50, new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                ignoreAchievement = true;
+                triggerAchievement(AchievementSource.ACHIEVEMENT_PAGE, event.entityPlayer, pf, event.entityPlayer, event.achievement);
+                ignoreAchievement = false;
+            }
+        });
     }
 
     private static void triggerAchievement(AchievementSource source, EntityPlayer player, Object... in)
