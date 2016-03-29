@@ -14,12 +14,11 @@ import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import tterrag.customthings.common.config.json.items.RecordType;
 
 import com.enderio.core.common.Handlers.Handler;
-import com.enderio.core.common.Handlers.Handler.HandlerType;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-@Handler(HandlerType.FORGE)
+@Handler
 public class LivingDropsHandler
 {
     private static final Random rand = new Random();

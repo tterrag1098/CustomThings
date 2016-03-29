@@ -7,11 +7,10 @@ import tterrag.customthings.common.block.IBlockCustom;
 import tterrag.customthings.common.config.json.BlockType;
 
 import com.enderio.core.common.Handlers.Handler;
-import com.enderio.core.common.Handlers.Handler.HandlerType;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
-@Handler(HandlerType.FORGE)
+@Handler
 public class BreakSpeedFixer
 {
     @SubscribeEvent
