@@ -85,7 +85,7 @@ public class AchievementHandler
 
     private static void triggerAchievement(AchievementSource source, EntityPlayer player, Object... in)
     {
-        if (!player.worldObj.isRemote)
+        if (!player.worldObj.isRemote && player instanceof EntityPlayerMP) // LP made me do it
         {
             for (AchievementType type : AchievementType.lookup.get(source))
             {
