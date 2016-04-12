@@ -7,6 +7,7 @@ import java.util.EnumMap;
 import java.util.List;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
 
 import tterrag.customthings.CustomThings;
 import tterrag.customthings.common.compat.CompatUtil;
@@ -124,7 +125,7 @@ public class ConfigHandler
     private static void addIcons(ResourcePackAssembler assembler)
     {
         initialize("icons");
-        for (File f : new File(baseDir.getAbsolutePath() + "/icons").listFiles(EnderFileUtils.pngFilter))
+        for (File f : new File(baseDir.getAbsolutePath() + "/icons").listFiles((FileFilter) FileFilterUtils.or((IOFileFilter) EnderFileUtils.pngFilter, FileFilterUtils.suffixFileFilter(".mcmeta"))))
         {
             assembler.addIcon(f);
         }
