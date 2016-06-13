@@ -4,11 +4,14 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.stats.StatisticsFile;
+import net.minecraft.stats.StatisticsManagerServer;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.AchievementEvent;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemPickupEvent;
 import tterrag.customthings.common.config.json.AchievementType;
 import tterrag.customthings.common.config.json.AchievementType.AchievementData;
 import tterrag.customthings.common.config.json.AchievementType.AchievementSource;
@@ -17,25 +20,21 @@ import com.enderio.core.EnderCore;
 import com.enderio.core.common.Handlers.Handler;
 import com.enderio.core.common.util.ItemUtil;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.ItemPickupEvent;
-
 @Handler
 public class AchievementHandler
 {
     @SubscribeEvent
     public void onBlockBreak(BreakEvent event)
     {
-        triggerAchievement(AchievementSource.BLOCK_BREAK, event.getPlayer(), event.block, event.blockMetadata);
+        triggerAchievement(AchievementSource.BLOCK_BREAK, event.getPlayer(), event.getState());
     }
 
     @SubscribeEvent
     public void onEntityDeath(LivingDeathEvent event)
     {
-        if (event.source.getSourceOfDamage() instanceof EntityPlayer)
+        if (event.getSource().getSourceOfDamage() instanceof EntityPlayer)
         {
-            triggerAchievement(AchievementSource.ENTITY_KILL, (EntityPlayer) event.source.getSourceOfDamage(), event.entityLiving);
+            triggerAchievement(AchievementSource.ENTITY_KILL, (EntityPlayer) event.getSource().getSourceOfDamage(), event.getEntityLiving());
         }
     }
 
@@ -56,7 +55,7 @@ public class AchievementHandler
     @SubscribeEvent
     public void onAchievement(final AchievementEvent event)
     {
-        if (ignoreAchievement || event.entityPlayer.worldObj.isRemote || ((EntityPlayerMP)event.entityPlayer).func_147099_x().hasAchievementUnlocked(event.achievement))
+        if (ignoreAchievement || event.getEntityPlayer().worldObj.isRemote || ((EntityPlayerMP)event.getEntityPlayer()).getStatFile().hasAchievementUnlocked(event.getAchievement()))
         {
             return;
         }
@@ -64,7 +63,7 @@ public class AchievementHandler
         AchievementPage page = null;
         for (AchievementPage p : AchievementPage.getAchievementPages())
         {
-            if (p.getAchievements().contains(event.achievement))
+            if (p.getAchievements().contains(event.getAchievement()))
             {
                 page = p;
             }
@@ -77,7 +76,7 @@ public class AchievementHandler
             public void run()
             {
                 ignoreAchievement = true;
-                triggerAchievement(AchievementSource.ACHIEVEMENT_PAGE, event.entityPlayer, pf, event.entityPlayer, event.achievement);
+                triggerAchievement(AchievementSource.ACHIEVEMENT_PAGE, event.getEntityPlayer(), pf, event.getEntityPlayer(), event.getAchievement());
                 ignoreAchievement = false;
             }
         });
@@ -93,7 +92,7 @@ public class AchievementHandler
                 {
                     if (type.rewardStack != null)
                     {
-                        StatisticsFile file = ((EntityPlayerMP) player).func_147099_x();
+                        StatisticsManagerServer file = ((EntityPlayerMP) player).getStatFile();
                         if (!file.hasAchievementUnlocked(type.achievement) && file.canUnlockAchievement(type.achievement))
                         {
                             ItemStack stack = type.rewardStack.copy();

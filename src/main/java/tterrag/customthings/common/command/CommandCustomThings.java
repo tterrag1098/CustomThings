@@ -4,13 +4,16 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import tterrag.customthings.common.config.ConfigHandler;
 
 public class CommandCustomThings extends CommandBase
 {
-    public static String[] ARGS = { "reloadResources" };
+    public static final String[] ARGS = { "reloadResources" };
 
     @Override
     public String getCommandName()
@@ -31,7 +34,7 @@ public class CommandCustomThings extends CommandBase
     }
 
     @Override
-    public void processCommand(ICommandSender p_71515_1_, String[] args)
+    public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException
     {
         if (args.length < 1)
         {
@@ -46,9 +49,8 @@ public class CommandCustomThings extends CommandBase
         }
     }
 
-    @SuppressWarnings("rawtypes")
     @Override
-    public List addTabCompletionOptions(ICommandSender player, String[] args)
+    public List<String> getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, BlockPos pos)
     {
         return getListOfStringsMatchingLastWord(args, ARGS);
     }

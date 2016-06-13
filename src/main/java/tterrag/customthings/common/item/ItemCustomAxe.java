@@ -15,10 +15,9 @@ public class ItemCustomAxe extends ItemAxe implements ICustomRepair<ToolType>
     
     public ItemCustomAxe(ToolType type)
     {
-        super(type.getToolMaterial());
+        super(type.getToolMaterial(), type.getToolMaterial().getDamageVsEntity(), type.getToolMaterial().getEfficiencyOnProperMaterial());
         this.type = type;
         this.setUnlocalizedName(type.getUnlocName(ToolClass.AXE));
-        this.setTextureName(type.getIconName(ToolClass.AXE));
     }
     
     @Override

@@ -1,9 +1,9 @@
 package tterrag.customthings.common.block;
 
-import net.minecraft.creativetab.CreativeTabs;
-
 import lombok.experimental.Delegate;
 import net.minecraft.block.BlockFence;
+import net.minecraft.creativetab.CreativeTabs;
+import tterrag.customthings.common.config.json.BlockType;
 import tterrag.customthings.common.config.json.BlockType.BlockData;
 
 public class BlockCustomFence extends BlockFence implements IBlockCustom
@@ -21,13 +21,13 @@ public class BlockCustomFence extends BlockFence implements IBlockCustom
         return proxy == null ? BlockProxy.<BlockCustomFence> dummy() : proxy;
     }
 
-    public BlockCustomFence(BlockData data)
+    public BlockCustomFence(BlockData data, BlockType... types)
     {
-        super("unused", data.getType().material);
-        setStepSound(data.getType().sound);
-        this.proxy = new BlockProxy<BlockCustomFence>(this, data, 16);
+        super(data.getType().material, data.getType().material.getMaterialMapColor());
+        setSoundType(data.getType().sound);
+        this.proxy = new BlockProxy<BlockCustomFence>(this, data, types);
         setHardness(0.3f);
         setResistance(0.5f);
-        setCreativeTab(CreativeTabs.tabBlock);
+        setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
     }
 }

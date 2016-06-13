@@ -1,15 +1,29 @@
-*.class
+/download
+/eclipseBin
 
-# Package Files #
-*.war
-*.ear
+## gradle
+/.gradle
 /build
+
+## ForgeGradle
+/run
+/*.launch
+
+## eclipse
 /eclipse
+/.settings
+/.metadata
+/.classpath
+/.project
 /bin
 
-*.mtl
-*.classpath
-*.project
-/.gradle
-/.settings
-/libs
+## intellij
+/out
+/.idea
+/*.iml
+/*.ipr
+/*.iws
+/atlassian-ide-plugin.xml
+
+## gedit
+*~

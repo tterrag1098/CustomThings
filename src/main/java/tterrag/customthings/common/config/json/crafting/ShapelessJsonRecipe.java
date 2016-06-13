@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import tterrag.customthings.common.config.json.IJsonType;
 
 import com.enderio.core.common.util.ItemUtil;
-
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ShapelessJsonRecipe implements IJsonType
 {

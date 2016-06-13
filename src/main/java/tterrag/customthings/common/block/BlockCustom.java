@@ -2,11 +2,13 @@ package tterrag.customthings.common.block;
 
 import lombok.experimental.Delegate;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import tterrag.customthings.common.config.json.BlockType;
 import tterrag.customthings.common.config.json.BlockType.BlockData;
 
 public class BlockCustom extends Block implements IBlockCustom
-{
+{    
     private final BlockProxy<BlockCustom> proxy;
     
     @Delegate
@@ -15,19 +17,20 @@ public class BlockCustom extends Block implements IBlockCustom
         return proxy == null ? BlockProxy.<BlockCustom>dummy() : proxy;
     }
 
-    public BlockCustom(BlockData data)
+    public BlockCustom(BlockData data, BlockType... types)
     {
         super(data.getType().material);
-        setStepSound(data.getType().sound);
-        this.proxy = new BlockProxy<BlockCustom>(this, data, 16);
+        setSoundType(data.getType().sound);
+        this.proxy = new BlockProxy<BlockCustom>(this, data, types);
         setHardness(0.3f);
         setResistance(0.5f);
-        setCreativeTab(CreativeTabs.tabBlock);
+        setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
     }
     
     @Override
-    public boolean func_149730_j()
+    @Deprecated
+    public boolean isFullBlock(IBlockState state)
     {
-        return isOpaqueCube();
+        return isOpaqueCube(state);
     }
 }

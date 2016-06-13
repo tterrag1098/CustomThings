@@ -1,11 +1,10 @@
 package tterrag.customthings.common.config.json.crafting;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import tterrag.customthings.common.config.json.IJsonType;
 
 import com.enderio.core.common.util.ItemUtil;
-
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class SmeltingJsonRecipe implements IJsonType
 {

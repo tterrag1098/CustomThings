@@ -2,12 +2,14 @@ package tterrag.customthings.common.config.json.items;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import lombok.Getter;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import org.apache.commons.lang3.StringUtils;
@@ -17,8 +19,6 @@ import tterrag.customthings.common.item.ItemCustom;
 
 import com.enderio.core.common.util.ItemUtil;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-
 public class ItemType extends JsonType
 {
     /* JSON Fields @formatter:off */
@@ -26,7 +26,7 @@ public class ItemType extends JsonType
     public String[] oreDictNames    = null;
     public int      maxStackSize    = 64;
     public int      burnTime        = 0;
-    public String   rarity          = EnumRarity.common.name();
+    public String   rarity          = EnumRarity.COMMON.name();
     public boolean  enchanted       = false;
     /* End JSON Fields @formatter:on */
 
@@ -56,14 +56,14 @@ public class ItemType extends JsonType
     {
         maxStackSize = MathHelper.clamp_int(maxStackSize, 1, 64);
         burnTime = Math.max(0, burnTime);
-        enumRarity = EnumRarity.valueOf(rarity);
+        enumRarity = EnumRarity.valueOf(rarity.toUpperCase(Locale.US));
 
         if (getClass() == ItemType.class)
         {
             if (getItem() == null)
             {
                 item = new ItemCustom();
-                GameRegistry.registerItem(getItem(), "item");
+                GameRegistry.register(getItem().setRegistryName("item"));
             }
             types.add(this);
         }

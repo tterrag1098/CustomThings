@@ -2,16 +2,19 @@ package tterrag.customthings.common.block;
 
 import java.util.ArrayList;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import lombok.experimental.Delegate;
 import net.minecraft.block.BlockSlab;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import tterrag.customthings.common.config.json.BlockType.BlockData;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import tterrag.customthings.common.config.json.BlockType;
+import tterrag.customthings.common.config.json.BlockType.BlockData;
 import tterrag.customthings.common.item.ItemBlockCustomSlab;
-import net.minecraft.creativetab.CreativeTabs;
 
+@MaxTypes(8)
 public class BlockCustomSlab extends BlockSlab implements IBlockCustom
 {
     private interface Exclusions
@@ -35,36 +38,30 @@ public class BlockCustomSlab extends BlockSlab implements IBlockCustom
 
     private static int doubleslab_num = 0;
     
-    public BlockCustomSlab(BlockData data)
+    public BlockCustomSlab(BlockData data, BlockType... types)
     {
-        super(false, data.getType().material);
-        this.proxy = new BlockProxy<BlockCustomSlab>(this, data, 8) {
-            
-            @Override
-            public void setType(BlockType type, int meta){
-                super.setType(type, meta);
-                doubleslab.setType(type, meta);
-            }
-        };
+        super(data.getType().material);
+        this.proxy = new BlockProxy<BlockCustomSlab>(this, data, types);
         doubleslab = new BlockCustomSlab(this);
-        GameRegistry.registerBlock(doubleslab, ItemBlockCustomSlab.class, "doubleslab" + doubleslab_num++, true);
-        setStepSound(data.getType().sound);
-        setCreativeTab(CreativeTabs.tabBlock);
+        GameRegistry.register(doubleslab.setRegistryName("doubleslab" + doubleslab_num++));
+        GameRegistry.register(new ItemBlockCustomSlab(doubleslab, true).setRegistryName(doubleslab.getRegistryName()));
+        setSoundType(data.getType().sound);
+        setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
         useNeighborBrightness = true;
     }
     
     private BlockCustomSlab(BlockCustomSlab slab)
     {
-        super(true, slab.getData().getType().material);
-        this.proxy = new BlockProxy<BlockCustomSlab>(this, slab.getData(), 8);
+        super(slab.getData().getType().material);
+        this.proxy = new BlockProxy<BlockCustomSlab>(this, slab.getData(), slab.getProperty().getAllowedValues().toArray(new BlockType[0]));
         doubleslab = this;
-        setStepSound(slab.getData().getType().sound);
+        setSoundType(slab.getData().getType().sound);
     }
     
     @Override
-    public String func_150002_b(int p_150002_1_)
+    public String getUnlocalizedName(int p_150002_1_)
     {
-        String name = getType(p_150002_1_).name;
+        String name = getStateFromMeta(p_150002_1_).getValue(getProperty()).name;
         if (doubleslab == this)
         {
             name += ".doubleslab";
@@ -73,8 +70,27 @@ public class BlockCustomSlab extends BlockSlab implements IBlockCustom
     }
 
     @Override
-    public boolean func_149730_j()
+    @Deprecated
+    public boolean isFullBlock(IBlockState state)
     {
-        return isOpaqueCube();
+        return isOpaqueCube(state);
+    }
+    
+    @Override
+    public boolean isDouble() 
+    {
+        return doubleslab == this;
+    }
+
+    @Override
+    public IProperty<?> getVariantProperty() 
+    {
+        return getProperty();
+    }
+
+    @Override
+    public Comparable<?> getTypeForItem(ItemStack stack) 
+    {
+        return stack.getItemDamage();
     }
 }

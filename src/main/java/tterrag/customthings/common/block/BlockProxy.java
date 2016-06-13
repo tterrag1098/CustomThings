@@ -1,199 +1,158 @@
 package tterrag.customthings.common.block;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.google.common.collect.Lists;
+import org.apache.commons.lang3.ArrayUtils;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
-import tterrag.customthings.CustomThings;
 import tterrag.customthings.common.config.json.BlockType;
 import tterrag.customthings.common.config.json.BlockType.BlockData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+
+import com.google.common.collect.Lists;
 
 public class BlockProxy<T extends Block & IBlockCustom> implements IBlockCustom
 {
-    public final BlockType[] types;
+    public final IProperty<BlockType> types;
 
     private final T block;
     private final BlockData data;
-    private final int maxTypes;
     private final Random rand = new Random();
+    
+    private final BlockStateContainer states;
 
-    @SideOnly(Side.CLIENT)
-    private IIcon[][] icons;
-
-    public BlockProxy(T block, BlockData data, int maxTypes)
+    public BlockProxy(T block, BlockData data, BlockType... types)
     {
         this.block = block;
         this.data = data;
-        this.maxTypes = maxTypes;
-        this.types = new BlockType[maxTypes];
+        this.types = new PropertyBlockType("type", types);
+        if (block != null) {
+            this.states = new BlockStateContainer(block, ArrayUtils.add(block.blockState.getProperties().toArray(new IProperty[0]), this.types));
+            this.block.setDefaultState(states.getBaseState());
+        } else {
+            this.states = null;
+        }
     }
     
     public static <T extends Block & IBlockCustom> BlockProxy<T> dummy()
     {
-        return new BlockProxy<T>(null, null, 1);
+        return new BlockProxy<T>(null, null);
     }
-
+    
+    public BlockStateContainer getBlockState() 
+    {
+        return states;
+    }
+    
+    public IBlockState getStateFromMeta(int meta) 
+    {
+        return block.getDefaultState().withProperty(types, BlockType.fromMeta(block, meta));
+    }
+    
+    public int getMetaFromState(IBlockState state) 
+    {
+        return state.getValue(types).getVariant();
+    }
+    
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public void getSubBlocks(Item item, CreativeTabs tab, List list)
     {
-        for (int i = 0; i < getMaxTypes(); i++)
+        for (BlockType type : types.getAllowedValues())
         {
-            if (getTypes()[i] != null)
-            {
-                list.add(new ItemStack(item, 1, i));
-            }
-        }
-    }
-    
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister register)
-    {
-        icons = new IIcon[getMaxTypes()][6];
-        for (int i = 0; i < types.length; i++)
-        {
-            BlockType type = types[i];
-            if (type != null)
-            {
-                if (type.textureMap == null)
-                {
-                    icons[i][0] = register.registerIcon(CustomThings.MODID.toLowerCase() + ":" + type.name);
-                }
-                else
-                {
-                    for (int j = 0; j < type.textureMap.length; j++)
-                    {
-                        String tex = type.textureMap[j];
-                        icons[i][j] = register.registerIcon(CustomThings.MODID.toLowerCase() + ":" + tex);
-                    }
-                }
-            }
+            list.add(new ItemStack(item, 1, getMetaFromState(block.getDefaultState().withProperty(getProperty(), type))));
         }
     }
 
-    public IIcon getIcon(int side, int meta)
-    {
-        return getType(meta).textureMap == null ? icons[meta % getMaxTypes()][0] : icons[meta % getMaxTypes()][side];
-    }
-
-    public IIcon getIcon(IBlockAccess world, int x, int y, int z, int side)
-    {
-        return getIcon(side, world.getBlockMetadata(x, y, z));
-    }
-
-    public boolean isOpaqueCube()
+    public boolean isOpaqueCube(IBlockState state)
     {
         return block == null ? true : getData().isOpaque();
     }
 
-    public boolean isToolEffective(String tool, int metadata)
+    public boolean isToolEffective(String tool, IBlockState state)
     {
-        BlockType type = getType(metadata);
+        BlockType type = state.getValue(getProperty());
         return type.toolType.isEmpty() ? false : tool.equals(type.toolType);
     }
 
-    public String getHarvestTool(int metadata)
+    public String getHarvestTool(IBlockState state)
     {
-        BlockType type = getType(metadata);
+        BlockType type = state.getValue(getProperty());
         return type == null || type.toolType.isEmpty() ? null : type.toolType;
     }
 
-    public boolean canHarvestBlock(EntityPlayer player, int meta)
+    public boolean canHarvestBlock(IBlockAccess world, BlockPos pos, EntityPlayer player)
     {
-        BlockType type = getType(meta);
-        ItemStack held = player.getHeldItem();
-        int harvestLevel = getHarvestLevel(meta);
+        IBlockState state = world.getBlockState(pos);
+        BlockType type = state.getValue(getProperty());
+        ItemStack held = player.getHeldItemMainhand();
+        int harvestLevel = getHarvestLevel(state);
         if (type.toolType.isEmpty() || held == null)
         {
-            return ForgeHooks.canHarvestBlock(block, player, meta);
+            return ForgeHooks.canToolHarvestBlock(world, pos, held);
         }
-        return held.getItem().getHarvestLevel(held, getHarvestTool(meta)) >= harvestLevel
+        return held.getItem().getHarvestLevel(held, getHarvestTool(state)) >= harvestLevel
                 && held.getItem().getToolClasses(held).contains(type.toolType);
     }
 
-    public int getHarvestLevel(int metadata)
+    public int getHarvestLevel(IBlockState state)
     {
-        BlockType type = getType(metadata);
+        BlockType type = state.getValue(getProperty());
         return type == null ? 0 : type.harvestLevel;
     }
 
-    public float getBlockHardness(World world, int x, int y, int z)
+    @Deprecated
+    public float getBlockHardness(IBlockState state, World world, BlockPos pos)
     {
-        BlockType type = getType(world, x, y, z);
-        return type == null ? block.getBlockHardness(world, x, y, z) : type.hardness;
+        BlockType type = state.getValue(getProperty());
+        return type == null ? block.getBlockHardness(state, world, pos) : type.hardness;
     }
 
-    public float getExplosionResistance(Entity par1Entity, World world, int x, int y, int z, double explosionX, double explosionY, double explosionZ)
+    public float getExplosionResistance(World world, BlockPos pos, Entity exploder, Explosion explosion)
     {
-        BlockType type = getType(world, x, y, z);
-        return type == null ? block.getExplosionResistance(par1Entity) : type.resistance;
+        BlockType type = world.getBlockState(pos).getValue(getProperty());
+        return type == null ? block.getExplosionResistance(exploder) : type.resistance;
     }
 
-    public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
+    public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
     {
-        BlockType type = getType(metadata);
-        return type == null || type.drops.length == 0 ? Lists.newArrayList(new ItemStack(block, 1, metadata)) : type.getStackDrops();
+        BlockType type = state.getValue(getProperty());
+        return type == null || type.drops.length == 0 ? Lists.newArrayList(new ItemStack(block, 1, block.getMetaFromState(state))) : type.getStackDrops();
     }
 
-    public int damageDropped(int metadata)
+    public int damageDropped(IBlockState state)
     {
-        return metadata;
+        return block.getMetaFromState(state);
     }
 
-    public int getExpDrop(IBlockAccess world, int metadata, int fortune)
+    public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune)
     {
-        BlockType type = types[metadata];
+        BlockType type = state.getValue(getProperty());
         return type == null ? 0 : rand.nextInt(type.maxXp - type.minXp + 1) + type.minXp;
     }
     
-    public int getLightValue(IBlockAccess world, int x, int y, int z)
+    public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos)
     {
-        BlockType type = getType(world, x, y, z);
+        BlockType type = state.getValue(getProperty());
         return type.lightLevel;
-    }
-
-    private BlockType getType(IBlockAccess world, int x, int y, int z)
-    {
-        int meta = world.getBlockMetadata(x, y, z);
-        return getType(meta);
-    }
-
-    @Override
-    public void setType(BlockType type, int meta)
-    {
-        types[meta % types.length] = type;
-    }
-
-    @Override
-    public BlockType getType(int meta)
-    {
-        return types[meta % types.length];
     }
 
     @Override
     public BlockType getType(ItemStack stack)
     {
-        return types[stack.getItemDamage() % types.length];
-    }
-
-    @Override
-    public BlockType[] getTypes()
-    {
-        return types;
+        return BlockType.fromMeta(block, stack.getItemDamage());
     }
 
     @Override
@@ -201,10 +160,10 @@ public class BlockProxy<T extends Block & IBlockCustom> implements IBlockCustom
     {
         return data;
     }
-
+    
     @Override
-    public int getMaxTypes()
+    public IProperty<BlockType> getProperty() 
     {
-        return maxTypes;
+        return types;
     }
 }

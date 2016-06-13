@@ -3,12 +3,11 @@ package tterrag.customthings.common.handlers;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import tterrag.customthings.common.block.IBlockCustom;
 import tterrag.customthings.common.config.json.BlockType;
 
 import com.enderio.core.common.Handlers.Handler;
-
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 @Handler
 public class BreakSpeedFixer
@@ -16,17 +15,17 @@ public class BreakSpeedFixer
     @SubscribeEvent
     public void onBreakSpeed(BreakSpeed event)
     {
-        if (event.block instanceof IBlockCustom)
+        if (event.getState().getBlock() instanceof IBlockCustom)
         {
-            BlockType type = ((IBlockCustom) event.block).getType(event.metadata);
+            BlockType type = event.getState().getValue(((IBlockCustom)event.getState().getBlock()).getProperty());
             if (type.toolType.isEmpty())
             {
                 return;
             }
-            ItemStack held = event.entityPlayer.getHeldItem();
+            ItemStack held = event.getEntityPlayer().getHeldItemMainhand();
             if (held != null && !held.getItem().getToolClasses(held).contains(type.toolType))
             {
-                event.newSpeed = ForgeHooks.canHarvestBlock(event.block, event.entityPlayer, event.metadata) ? 0.3f : 1;
+                event.setNewSpeed(ForgeHooks.canHarvestBlock(event.getState().getBlock(), event.getEntityPlayer(), event.getEntity().worldObj, event.getPos()) ? 0.3f : 1);
             }
         }
     }

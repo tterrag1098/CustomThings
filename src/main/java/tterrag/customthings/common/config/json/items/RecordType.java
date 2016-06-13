@@ -6,12 +6,12 @@ import java.util.List;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemRecord;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import org.apache.commons.lang3.StringUtils;
 
 import tterrag.customthings.common.item.ItemCustomRecord;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class RecordType extends ItemType
 {
@@ -30,7 +30,7 @@ public class RecordType extends ItemType
     	
         super.register();
         item = new ItemCustomRecord(this);
-        GameRegistry.registerItem(item, name);
+        GameRegistry.register(item.setRegistryName(name));
         types.add(this);
         OreDictionary.registerOre("record", item);
         OreDictionary.registerOre("record" + StringUtils.capitalize(name), item);

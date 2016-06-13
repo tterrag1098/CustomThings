@@ -1,6 +1,14 @@
 package tterrag.customthings;
 
 import net.minecraftforge.client.ClientCommandHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent;
+import net.minecraftforge.fml.common.event.FMLMissingMappingsEvent.MissingMapping;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import tterrag.customthings.common.command.CommandCustomThings;
 import tterrag.customthings.common.config.ConfigHandler;
 import tterrag.customthings.common.config.json.items.ItemType;
@@ -9,15 +17,6 @@ import tterrag.customthings.common.handlers.FuelHandler;
 import com.enderio.core.IEnderMod;
 import com.enderio.core.common.compat.CompatRegistry;
 import com.enderio.core.common.util.RegisterTime;
-
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLMissingMappingsEvent;
-import cpw.mods.fml.common.event.FMLMissingMappingsEvent.MissingMapping;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
 
 import static tterrag.customthings.CustomThings.*;
 

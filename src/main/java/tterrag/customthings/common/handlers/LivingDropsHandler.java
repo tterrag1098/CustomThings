@@ -2,6 +2,7 @@ package tterrag.customthings.common.handlers;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.entity.item.EntityItem;
@@ -11,12 +12,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemRecord;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import tterrag.customthings.common.config.json.items.RecordType;
 
 import com.enderio.core.common.Handlers.Handler;
-
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
 @Handler
 public class LivingDropsHandler
@@ -26,10 +26,10 @@ public class LivingDropsHandler
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onLivingDrop(LivingDropsEvent event)
     {
-        if (event.entityLiving instanceof EntityCreeper)
+        if (event.getEntityLiving() instanceof EntityCreeper)
         {
             boolean foundRecord = false;
-            Iterator<EntityItem> iter = event.drops.iterator();
+            Iterator<EntityItem> iter = event.getDrops().iterator();
             while (iter.hasNext())
             {
                 EntityItem e = iter.next();
@@ -41,16 +41,16 @@ public class LivingDropsHandler
 
             if (foundRecord)
             {
-                addRandomRecordToDrops(event.drops);
+                addRandomRecordToDrops(event.getDrops());
             }
         }
     }
 
-    private void addRandomRecordToDrops(ArrayList<EntityItem> drops)
+    private void addRandomRecordToDrops(List<EntityItem> list)
     {
         ArrayList<EntityItem> temp = new ArrayList<EntityItem>();
-        temp.addAll(drops);
-        drops.clear();
+        temp.addAll(list);
+        list.clear();
 
         for (EntityItem item : temp)
         {
@@ -61,7 +61,7 @@ public class LivingDropsHandler
                 ItemStack record;
                 if (random < 12)
                 {
-                    int id = Item.getIdFromItem(Items.record_13) + random;
+                    int id = Item.getIdFromItem(Items.RECORD_13) + random;
                     record = new ItemStack(Item.getItemById(id));
                 }
                 else
@@ -71,11 +71,11 @@ public class LivingDropsHandler
                 }
 
                 EntityItem entity = new EntityItem(item.worldObj, item.posX, item.posY, item.posZ, record);
-                drops.add(entity);
+                list.add(entity);
             }
             else
             {
-                drops.add(item);
+                list.add(item);
             }
         }
     }

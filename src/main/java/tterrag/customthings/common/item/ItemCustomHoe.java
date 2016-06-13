@@ -18,7 +18,6 @@ public class ItemCustomHoe extends ItemHoe implements ICustomRepair<ToolType>
         super(type.getToolMaterial());
         this.type = type;
         this.setUnlocalizedName(type.getUnlocName(ToolClass.HOE));
-        this.setTextureName(type.getIconName(ToolClass.HOE));
     }
     
     @Override

@@ -24,7 +24,6 @@ public class ItemCustomPickaxe extends ItemPickaxe implements ICustomRepair<Tool
         super(type.getToolMaterial());
         this.type = type;
         this.setUnlocalizedName(type.getUnlocName(ToolClass.PICKAXE));
-        this.setTextureName(type.getIconName(ToolClass.PICKAXE));
     }
 
     @Override

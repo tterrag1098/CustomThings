@@ -5,6 +5,7 @@ import lombok.experimental.Delegate;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -21,25 +22,17 @@ public class ItemCustomArmor extends ItemArmor implements ISpecialArmor, ICustom
     @Delegate
     private final ItemProxy<ArmorType, ItemCustomArmor> proxy = new ItemProxy<ArmorType, ItemCustomArmor>(this);
     
-    public ItemCustomArmor(ArmorType type, int slot)
+    public ItemCustomArmor(ArmorType type, EntityEquipmentSlot slot)
     {
         super(type.getMaterial(), 0, slot);
         this.type = type;
-        setTextureName(type.getIconName(slot));
         setUnlocalizedName(type.getUnlocName(slot));
-        this.textureName = CustomThings.MODID.toLowerCase() + ":textures/items/" + type.getTextureName(slot) + ".png";
-    }
-
-    @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type)
-    {
-        return textureName;
     }
     
     @Override
     public int getMaxDamage(ItemStack stack)
     {
-        return type.durabilities[armorType];
+        return type.durabilities[armorType.getIndex()];
     }
     
     @Override
@@ -47,7 +40,7 @@ public class ItemCustomArmor extends ItemArmor implements ISpecialArmor, ICustom
     {
         if (!source.isUnblockable())
         {
-            return new ArmorProperties(type.priorities[armorType], type.protectionRatios[armorType], type.protectionMaxes[armorType]);
+            return new ArmorProperties(type.priorities[armorType.getIndex()], type.protectionRatios[armorType.getIndex()], type.protectionMaxes[armorType.getIndex()]);
         }
         return new ArmorProperties(0, 0, 0);
     }

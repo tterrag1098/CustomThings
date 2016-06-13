@@ -4,21 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import lombok.Getter;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import tterrag.customthings.CustomThings;
 import tterrag.customthings.common.config.json.IHasMaterial;
 import tterrag.customthings.common.item.ItemCustomArmor;
 
 import com.enderio.core.common.util.ItemUtil;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-
+import static net.minecraft.inventory.EntityEquipmentSlot.*;
+ 
 public class ArmorType extends ItemType implements IHasMaterial
 {
     /* JSON Fields @formatter:off */
@@ -53,6 +56,7 @@ public class ArmorType extends ItemType implements IHasMaterial
         return ArmorMaterial.valueOf(getMaterialName());
     }
 
+    private static final EntityEquipmentSlot[] VALID_SLOTS = { HEAD, CHEST, LEGS, FEET };
     private static final String[] names = { "Helm", "Chest", "Legs", "Boots" };
     public static final List<ArmorType> types = new ArrayList<ArmorType>();
 
@@ -60,15 +64,15 @@ public class ArmorType extends ItemType implements IHasMaterial
     public void register()
     {
         super.register();
-        EnumHelper.addArmorMaterial(getMaterialName(), 0, protectionDisplays, enchantability); // dummy, used for enchantability
+        EnumHelper.addArmorMaterial(getMaterialName(), name, 0, protectionDisplays, enchantability, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, enchantability); // dummy, used for enchantability
         items = new Item[4];
-        for (int i = 0; i <= 3; i++)
+        for (EntityEquipmentSlot slot : VALID_SLOTS)
         {
-            if (ArrayUtils.contains(armors, i))
+            if (ArrayUtils.contains(armors, slot.getIndex()))
             {
-                items[i] = new ItemCustomArmor(this, i);
-                GameRegistry.registerItem(items[i], name + names[i]);
-                addOreDictNames(new ItemStack(items[i]));
+                items[slot.getIndex()] = new ItemCustomArmor(this, slot);
+                GameRegistry.register(items[slot.getIndex()].setRegistryName(name + names[slot.getIndex()]));
+                addOreDictNames(new ItemStack(items[slot.getIndex()]));
             }
         }
         types.add(this);
@@ -80,14 +84,9 @@ public class ArmorType extends ItemType implements IHasMaterial
         repairMat = material.equals("null") ? null : ItemUtil.parseStringIntoItemStack(material);
     }
 
-    public String getUnlocName(int slot)
+    public String getUnlocName(EntityEquipmentSlot slot)
     {
-        return name + names[slot];
-    }
-
-    public String getIconName(int slot)
-    {
-        return CustomThings.MODID.toLowerCase() + ":" + getUnlocName(slot);
+        return name + names[slot.getIndex()];
     }
 
     public Item[] getItems()

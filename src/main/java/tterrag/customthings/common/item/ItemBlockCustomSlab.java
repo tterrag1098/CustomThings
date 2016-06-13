@@ -10,13 +10,13 @@ public class ItemBlockCustomSlab extends ItemSlab implements ICustomItem<BlockTy
 {
     public ItemBlockCustomSlab(Block slab, Boolean doubleslab)
     {
-        super(slab, (BlockCustomSlab) slab, ((BlockCustomSlab)slab).doubleslab, doubleslab);
+        super(slab, (BlockCustomSlab) slab, ((BlockCustomSlab)slab).doubleslab);
     }
 
     @Override
     public BlockType getType(ItemStack stack)
     {
-        return ((BlockCustomSlab)field_150939_a).getType(stack);
+        return ((BlockCustomSlab)block).getType(stack);
     }
     
     @Override

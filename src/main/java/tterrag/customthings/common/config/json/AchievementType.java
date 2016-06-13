@@ -4,6 +4,7 @@ import java.util.List;
 
 import lombok.Value;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,7 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.Achievement;
 import net.minecraft.stats.AchievementList;
-import net.minecraft.stats.StatisticsFile;
+import net.minecraft.stats.StatisticsManager;
 import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -48,7 +49,7 @@ public class AchievementType extends JsonType
                         return obj.equals(test);
                     }
                 }
-                else if (obj instanceof Block || obj instanceof Item)
+                else if (obj instanceof IBlockState || obj instanceof Item)
                 {
                     return obj == test;
                 }
@@ -112,7 +113,7 @@ public class AchievementType extends JsonType
             {
                 if (in[0] instanceof EntityLivingBase)
                 {
-                    String entityName = (String) EntityList.classToStringMapping.get(in[0].getClass());
+                    String entityName = (String) EntityList.CLASS_TO_NAME.get(in[0].getClass());
                     if (entityName != null)
                     {
                         return entityName.toLowerCase().contains(((String) test).toLowerCase());
@@ -136,7 +137,7 @@ public class AchievementType extends JsonType
                 if (in[0] == test && in[1] instanceof EntityPlayerMP)
                 {
                     AchievementPage page = (AchievementPage) test;
-                    StatisticsFile file = ((EntityPlayerMP) in[1]).func_147099_x();
+                    StatisticsManager file = ((EntityPlayerMP) in[1]).getStatFile();
                     for (Achievement a : page.getAchievements())
                     {
                         if (!file.hasAchievementUnlocked(a) && a != in[2] && (!(a instanceof Ach) || (((Ach)a).parent.achievementSource != this || !((Ach)a).parent.required.equals(page.getName()))))
@@ -178,7 +179,7 @@ public class AchievementType extends JsonType
             return s.replace(TIMESTAMP.template(), Long.toString(data.time) + "L")
                     .replace(ACHIEVEMENT_ID.template(), data.ach.statId)
                     .replace(ACHIEVEMENT_NAME.template(), "achievement." + data.ach.statId)
-                    .replace(USER_NAME.template(), data.player.getCommandSenderName())
+                    .replace(USER_NAME.template(), data.player.getName())
                     .replace(USER_UUID.template(), data.player.getGameProfile().getId().toString())
                     ;
         }
@@ -225,7 +226,7 @@ public class AchievementType extends JsonType
     {
         if (parent != null)
         {
-            for (Achievement a : (List<Achievement>) AchievementList.achievementList)
+            for (Achievement a : AchievementList.ACHIEVEMENTS)
             {
                 if (a.statId.equals(parent))
                 {
@@ -267,7 +268,7 @@ public class AchievementType extends JsonType
         }
         else
         {
-            AchievementList.achievementList.add(achievement);
+            AchievementList.ACHIEVEMENTS.add(achievement);
         }
 
         achievement.registerStat();

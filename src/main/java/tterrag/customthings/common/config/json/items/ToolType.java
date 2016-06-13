@@ -8,6 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.EnumHelper;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 
 import org.apache.commons.lang3.StringUtils;
@@ -22,8 +23,6 @@ import tterrag.customthings.common.item.ItemCustomShovel;
 import tterrag.customthings.common.item.ItemCustomSword;
 
 import com.enderio.core.common.util.ItemUtil;
-
-import cpw.mods.fml.common.registry.GameRegistry;
 
 public class ToolType extends ItemType implements IHasMaterial
 {
@@ -88,31 +87,32 @@ public class ToolType extends ItemType implements IHasMaterial
 
         for (ToolClass clazz : getToolClasses())
         {
+            String name = clazz.getUnlocName(this.name);
             switch (clazz)
             {
             case PICKAXE:
                 pickaxe = instantiate(clazz);
-                GameRegistry.registerItem(pickaxe, clazz.getUnlocName(name));
+                GameRegistry.register(pickaxe.setRegistryName(name));
                 addOreDictNames(new ItemStack(pickaxe, 1, OreDictionary.WILDCARD_VALUE));
                 break;
             case AXE:
                 axe = instantiate(clazz);
-                GameRegistry.registerItem(axe, clazz.getUnlocName(name));
+                GameRegistry.register(axe.setRegistryName(name));
                 addOreDictNames(new ItemStack(axe, 1, OreDictionary.WILDCARD_VALUE));
                 break;
             case HOE:
                 hoe = instantiate(clazz);
-                GameRegistry.registerItem(hoe, clazz.getUnlocName(name));
+                GameRegistry.register(hoe.setRegistryName(name));
                 addOreDictNames(new ItemStack(hoe, 1, OreDictionary.WILDCARD_VALUE));
                 break;
             case SHOVEL:
                 shovel = instantiate(clazz);
-                GameRegistry.registerItem(shovel, clazz.getUnlocName(name));
+                GameRegistry.register(shovel.setRegistryName(name));
                 addOreDictNames(new ItemStack(shovel, 1, OreDictionary.WILDCARD_VALUE));
                 break;
             case SWORD:
                 sword = instantiate(clazz);
-                GameRegistry.registerItem(sword, clazz.getUnlocName(name));
+                GameRegistry.register(sword.setRegistryName(name));
                 addOreDictNames(new ItemStack(sword, 1, OreDictionary.WILDCARD_VALUE));
                 break;
             }

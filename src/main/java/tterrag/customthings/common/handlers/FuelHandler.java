@@ -2,11 +2,11 @@ package tterrag.customthings.common.handlers;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.IFuelHandler;
 import tterrag.customthings.common.config.json.BlockType;
 import tterrag.customthings.common.config.json.IJsonType;
 import tterrag.customthings.common.config.json.items.ItemType;
 import tterrag.customthings.common.item.ICustomItem;
-import cpw.mods.fml.common.IFuelHandler;
 
 public class FuelHandler implements IFuelHandler
 {

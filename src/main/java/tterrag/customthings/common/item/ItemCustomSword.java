@@ -18,7 +18,6 @@ public class ItemCustomSword extends ItemSword implements ICustomRepair<ToolType
         super(type.getToolMaterial());
         this.type = type;
         this.setUnlocalizedName(type.getUnlocName(ToolClass.SWORD));
-        this.setTextureName(type.getIconName(ToolClass.SWORD));
     }
     
     @Override

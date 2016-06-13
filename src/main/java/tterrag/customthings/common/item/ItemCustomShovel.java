@@ -18,7 +18,6 @@ public class ItemCustomShovel extends ItemSpade implements ICustomRepair<ToolTyp
         super(type.getToolMaterial());
         this.type = type;
         this.setUnlocalizedName(type.getUnlocName(ToolClass.SHOVEL));
-        this.setTextureName(type.getIconName(ToolClass.SHOVEL));
     }
     
     @Override
