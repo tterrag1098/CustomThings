@@ -211,7 +211,7 @@ public class BlockType extends JsonType
                 for (BlockType block : blocks)
                 {
                     realBlock.setType(block, meta++);
-                    if (meta > realBlock.getMaxTypes())
+                    if (meta >= realBlock.getMaxTypes())
                     {
                         registerBlock(d, realBlock, blockNum++);
                         realBlock = d.getShape().create(d);
