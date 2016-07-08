@@ -243,7 +243,7 @@ public class BlockType extends JsonType implements Comparable<BlockType>
                 {
                     types.add(block);
                     block.variant = meta++;
-                    if (meta > maxTypes)
+                    if (meta >= maxTypes)
                     {
                         registerBlock(d, blockNum++, types);
                         meta = 0;
