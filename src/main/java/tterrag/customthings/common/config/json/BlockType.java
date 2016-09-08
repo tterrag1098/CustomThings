@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.Value;
+import lombok.extern.log4j.Log4j2;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -22,6 +23,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import org.apache.commons.lang3.StringUtils;
 
+import tterrag.customthings.CustomThings;
 import tterrag.customthings.common.block.BlockCustom;
 import tterrag.customthings.common.block.BlockCustomFalling;
 import tterrag.customthings.common.block.BlockCustomFence;
@@ -262,13 +264,18 @@ public class BlockType extends JsonType implements Comparable<BlockType>
     {
         BlockType[] types = typelist.toArray(new BlockType[typelist.size()]);
         IBlockCustom block = data.getShape().create(data, types);
+        
+        for (int i = 0; i < types.length; i++) {
+            BlockType type = types[i];
+            type.block = block;
+            stateLookup.put(type.block, type.variant, type);
+        }
+        
         data.getShape().registerBlock(block, index);
         
         for (int i = 0; i < types.length; i++)
         {
             BlockType type = types[i];
-            type.block = block;
-            stateLookup.put(type.block, type.variant, type);
             
             ItemStack stack = new ItemStack((Block) block, 1, i);
             OreDictionary.registerOre("block" + StringUtils.capitalize(type.name), stack);
