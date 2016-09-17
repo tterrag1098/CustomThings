@@ -36,7 +36,7 @@ public class ItemType extends JsonType
     @Getter
     private transient EnumRarity enumRarity = null;
 
-    private static Item item;
+    private static Item theItem;
 
     public String getUnlocName()
     {
@@ -62,15 +62,15 @@ public class ItemType extends JsonType
         {
             if (getItem() == null)
             {
-                item = new ItemCustom();
+                theItem = new ItemCustom();
                 GameRegistry.registerItem(getItem(), "item");
             }
             types.add(this);
-        }
 
-        ItemStack stack = getStack();
-        OreDictionary.registerOre("item" + StringUtils.capitalize(name), stack);
-        addOreDictNames(stack);
+            ItemStack stack = getStack();
+            OreDictionary.registerOre("item" + StringUtils.capitalize(name), stack);
+            addOreDictNames(stack);
+        }
     }
 
     protected void addOreDictNames(ItemStack stack)
@@ -105,6 +105,6 @@ public class ItemType extends JsonType
 
     public static Item getItem()
     {
-        return item;
+        return theItem;
     }
 }
