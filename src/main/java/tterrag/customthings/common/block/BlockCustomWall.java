@@ -2,6 +2,7 @@ package tterrag.customthings.common.block;
 
 import lombok.experimental.Delegate;
 import net.minecraft.block.BlockWall;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import tterrag.customthings.common.config.json.BlockType;
 import tterrag.customthings.common.config.json.BlockType.BlockData;
@@ -10,7 +11,7 @@ public class BlockCustomWall extends BlockWall implements IBlockCustom
 {
     private interface Exclusions
     {
-        public void isOpaqueCube();
+        public void isOpaqueCube(IBlockState state);
     }
 
     private final BlockProxy<BlockCustomWall> proxy;

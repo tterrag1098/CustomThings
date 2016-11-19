@@ -19,7 +19,7 @@ public class BlockCustomSlab extends BlockSlab implements IBlockCustom
 {
     private interface Exclusions
     {
-        boolean isOpaqueCube();
+        boolean isOpaqueCube(IBlockState state);
 
         ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune);
 

@@ -3,27 +3,44 @@ package tterrag.customthings.common.config.json;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.enderio.core.common.util.ItemUtil;
+import com.google.common.base.Optional;
+import com.google.common.base.Preconditions;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.LinkedHashMultimap;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Multimap;
+import com.google.common.collect.Table;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.Value;
-import lombok.extern.log4j.Log4j2;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
-
-import org.apache.commons.lang3.StringUtils;
-
-import tterrag.customthings.CustomThings;
 import tterrag.customthings.common.block.BlockCustom;
 import tterrag.customthings.common.block.BlockCustomFalling;
 import tterrag.customthings.common.block.BlockCustomFence;
@@ -34,16 +51,6 @@ import tterrag.customthings.common.block.IBlockCustom;
 import tterrag.customthings.common.block.MaxTypes;
 import tterrag.customthings.common.item.ItemBlockCustom;
 import tterrag.customthings.common.item.ItemBlockCustomSlab;
-
-import com.enderio.core.common.util.ItemUtil;
-import com.google.common.base.Optional;
-import com.google.common.base.Preconditions;
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.collect.Multimap;
-import com.google.common.collect.Table;
 
 public class BlockType extends JsonType implements Comparable<BlockType>
 {
@@ -229,14 +236,18 @@ public class BlockType extends JsonType implements Comparable<BlockType>
     }
 
     private static int meta = 0;
+    
+    private static int getMaxTypes(Class<?> clazz) {
+        MaxTypes a = clazz.getAnnotation(MaxTypes.class);
+        return a == null ? 16 : a.value();
+    }
 
     public static void registerBlocks()
     {
         int blockNum = 0;
         for (BlockData d : blockTypes.keySet())
         {
-            MaxTypes a = d.shape.clazz.getAnnotation(MaxTypes.class);
-            int maxTypes = a == null ? 16 : a.value();
+            int maxTypes = getMaxTypes(d.shape.clazz);
             Collection<BlockType> blocks = blockTypes.get(d);
             if (!blocks.isEmpty())
             {
@@ -285,6 +296,32 @@ public class BlockType extends JsonType implements Comparable<BlockType>
                 }
             }
         }
+        
+        
+        if (FMLCommonHandler.instance().getSide().isClient()) {
+            doModelStuff((Block) block);
+        }
+    }
+    
+    private static void doModelStuff(Block block) {
+        int maxTypes = getMaxTypes(block.getClass());
+        Item item = Item.getItemFromBlock(block);
+        for (int i = 0; i < maxTypes; i++) {
+            BlockType type = fromMeta((IBlockCustom) block, i);
+            if (type == null) break;
+            ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(new ResourceLocation("customthings", type.name), "inventory"));
+        }
+        ModelLoader.setCustomStateMapper(block, new StateMapperBase() {
+            
+            @Override
+            protected ModelResourceLocation getModelResourceLocation(IBlockState state) {
+                IBlockCustom block = (IBlockCustom) state.getBlock();
+                ImmutableMap<IProperty<?>, Comparable<?>> props = state.getProperties();
+                Map<IProperty<?>, Comparable<?>> mapping = new HashMap<>(props);
+                mapping.remove(block.getProperty());
+                return new ModelResourceLocation(new ResourceLocation("customthings", state.getValue(block.getProperty()).name), this.getPropertyString(mapping));
+            }
+        });
     }
 
     public ArrayList<ItemStack> getStackDrops()

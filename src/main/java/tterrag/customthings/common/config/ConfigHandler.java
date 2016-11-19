@@ -25,6 +25,7 @@ import com.enderio.core.common.config.JsonConfigReader;
 import com.enderio.core.common.config.JsonConfigReader.ModToken;
 import com.enderio.core.common.util.EnderFileUtils;
 import com.enderio.core.common.util.ResourcePackAssembler;
+import com.enderio.core.common.util.ResourcePackAssembler.ModelType;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -100,6 +101,14 @@ public class ConfigHandler
 //        }
 
         assembleResourcePack();
+
+        addAll(armorReader.getElements());
+        addAll(toolReader.getElements());
+        addAll(itemReader.getElements());
+        addAll(recordReader.getElements());
+        addAll(blockReader.getElements());
+
+        BlockType.registerBlocks();
     }
     
     public static void assembleResourcePack()
@@ -108,6 +117,8 @@ public class ConfigHandler
         // .setHasPackPng(CustomThings.class);
         
         addIcons(assembler);
+        addBlockstates(assembler);
+        addModels(assembler);
         addLangs(assembler);
         addCustoms(assembler);
 
@@ -120,6 +131,29 @@ public class ConfigHandler
         for (File f : new File(baseDir.getAbsolutePath() + "/icons").listFiles((FileFilter) FileFilterUtils.or((IOFileFilter) EnderFileUtils.pngFilter, FileFilterUtils.suffixFileFilter(".mcmeta"))))
         {
             assembler.addIcon(f);
+        }
+    }
+    
+    private static void addBlockstates(ResourcePackAssembler assembler)
+    {
+        initialize("blockstates");
+        for (File f : new File(baseDir.getAbsolutePath() + "/blockstates").listFiles((FileFilter) FileFilterUtils.suffixFileFilter(".json")))
+        {
+            assembler.addModel(f, ModelType.BLOCKSTATE);
+        }
+    }
+    
+    private static void addModels(ResourcePackAssembler assembler)
+    {
+        initialize("models/item");
+        for (File f : new File(baseDir.getAbsolutePath() + "/models/item").listFiles((FileFilter) FileFilterUtils.suffixFileFilter(".json")))
+        {
+            assembler.addModel(f, ModelType.ITEM);
+        }
+        initialize("models/block");
+        for (File f : new File(baseDir.getAbsolutePath() + "/models/block").listFiles((FileFilter) FileFilterUtils.suffixFileFilter(".json")))
+        {
+            assembler.addModel(f, ModelType.BLOCK);
         }
     }
 
@@ -167,14 +201,8 @@ public class ConfigHandler
     
     public static void init()
     {
-        addAll(armorReader.getElements());
-        addAll(toolReader.getElements());
-        addAll(itemReader.getElements());
-        addAll(recordReader.getElements());
-        addAll(blockReader.getElements());
+
 //        addAll(fluidReader.getElements());
-        
-        BlockType.registerBlocks();
     }
 
     public static void postInit()
