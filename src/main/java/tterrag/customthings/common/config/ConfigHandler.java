@@ -6,6 +6,7 @@ import java.lang.reflect.Type;
 import java.util.EnumMap;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 
@@ -38,6 +39,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import lombok.SneakyThrows;
 
 public class ConfigHandler
 {
@@ -110,9 +112,13 @@ public class ConfigHandler
         assembleResourcePack();
     }
     
+    @SneakyThrows
     public static void assembleResourcePack()
     {
-        assembler = new ResourcePackAssembler(new File(baseDir.getAbsolutePath() + "/CustomThings-Resourcepack"), "Custom Things Resource Pack", CustomThings.MODID);
+        File oldFolder = new File(baseDir.getAbsolutePath() + "/CustomThings-Resourcepack");
+        FileUtils.deleteDirectory(oldFolder);
+
+        assembler = new ResourcePackAssembler(new File(baseDir.getAbsolutePath() + "/CustomThingsResourcepack"), "Custom Things Resource Pack", CustomThings.MODID);
         // .setHasPackPng(CustomThings.class);
         
         addIcons(assembler);
