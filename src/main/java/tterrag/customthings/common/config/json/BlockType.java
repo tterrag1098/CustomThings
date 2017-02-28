@@ -147,6 +147,7 @@ public class BlockType extends JsonType implements Comparable<BlockType>
     public int      lightLevel      = 0;
     public int      maxStackSize    = 64;
     public int      burnTime        = 0;
+    public int      layer           = 0;
     /* End JSON Fields @formatter:on */
 
     private transient DropData[] stackDrops;

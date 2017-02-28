@@ -14,6 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
@@ -79,6 +80,11 @@ public class BlockProxy<T extends Block & IBlockCustom> implements IBlockCustom
     public boolean isOpaqueCube(IBlockState state)
     {
         return block == null ? true : getData().isOpaque();
+    }
+    
+    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) 
+    {
+        return state.getValue(getProperty()).layer == layer.ordinal();
     }
 
     public boolean isToolEffective(String tool, IBlockState state)
