@@ -4,22 +4,8 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.List;
 
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
-
-import tterrag.customthings.CustomThings;
-import tterrag.customthings.common.config.json.AchievementType;
-import tterrag.customthings.common.config.json.BlockType;
-import tterrag.customthings.common.config.json.IJsonType;
-import tterrag.customthings.common.config.json.crafting.ShapedJsonRecipe;
-import tterrag.customthings.common.config.json.crafting.ShapelessJsonRecipe;
-import tterrag.customthings.common.config.json.crafting.SmeltingJsonRecipe;
-import tterrag.customthings.common.config.json.items.ArmorType;
-import tterrag.customthings.common.config.json.items.ItemType;
-import tterrag.customthings.common.config.json.items.RecordType;
-import tterrag.customthings.common.config.json.items.ToolType;
 
 import com.enderio.core.common.config.JsonConfigReader;
 import com.enderio.core.common.config.JsonConfigReader.ModToken;
@@ -31,6 +17,23 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
+import tterrag.customthings.CustomThings;
+import tterrag.customthings.common.config.json.AchievementType;
+import tterrag.customthings.common.config.json.BlockType;
+import tterrag.customthings.common.config.json.IJsonType;
+import tterrag.customthings.common.config.json.crafting.ShapedJsonRecipe;
+import tterrag.customthings.common.config.json.crafting.ShapelessJsonRecipe;
+import tterrag.customthings.common.config.json.crafting.SmeltingJsonRecipe;
+import tterrag.customthings.common.config.json.items.ArmorType;
+import tterrag.customthings.common.config.json.items.ItemType;
+import tterrag.customthings.common.config.json.items.RecordType;
+import tterrag.customthings.common.config.json.items.ToolType;
 
 public class ConfigHandler
 {
@@ -66,9 +69,9 @@ public class ConfigHandler
     private static ResourcePackAssembler assembler;
 
     @SuppressWarnings("serial")
-    public static void preInit(FMLPreInitializationEvent event)
+    public static void preInit()
     {
-        baseDir = new File(event.getSuggestedConfigurationFile().getParent() + "/" + CustomThings.MODID);
+        baseDir = new File(Loader.instance().getConfigDir(), CustomThings.MODID);
 
         ModToken token = new ModToken(CustomThings.class, CustomThings.MODID + "/misc");
         armorReader = new JsonConfigReader<ArmorType>(token, baseDir.getAbsolutePath() + "/" + "customArmors.json", ArmorType.class);
@@ -109,6 +112,11 @@ public class ConfigHandler
         addAll(blockReader.getElements());
 
         BlockType.registerBlocks();
+        
+        if (FMLCommonHandler.instance().getSide().isClient()) 
+        {
+            registerItemModels();
+        }
     }
     
     public static void assembleResourcePack()
@@ -198,6 +206,15 @@ public class ConfigHandler
     }
 
     private static List<IJsonType> allTypesCache = Lists.newArrayList();
+    
+    private static void registerItemModels() 
+    {
+        for (int i = 0; i < ItemType.types.size(); i++)
+        {
+            ItemType type = ItemType.types.get(i);
+            ModelLoader.setCustomModelResourceLocation(ItemType.getItem(), i, new ModelResourceLocation(new ResourceLocation(CustomThings.MODID, type.name), "inventory"));
+        }
+    }
     
     public static void init()
     {

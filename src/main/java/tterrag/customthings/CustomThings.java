@@ -27,11 +27,14 @@ public class CustomThings implements IEnderMod
     public static final String NAME = "Custom Things";
     public static final String VERSION = "@VERSION@";
     public static final String DEPENDENCIES = "after:endercore";
+    
+    public CustomThings() {
+        ConfigHandler.preInit();
+    }
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)
     {
-        ConfigHandler.preInit(event);
         CompatRegistry.INSTANCE.registerCompat(RegisterTime.POSTINIT, "tterrag.customthings.common.nei.NEIHider", "NotEnoughItems");
         if (event.getSide().isClient())
         {
